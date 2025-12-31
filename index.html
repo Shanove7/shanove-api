@@ -3,230 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shanove-Api | Full Portal</title>
+    <title>Shanove-Api | Developer Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { fontFamily: { sans: ['ui-sans-serif', 'system-ui'] }, colors: { primary: '#6366f1', dark: '#0f172a', cardDark: '#1e293b' } } }
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['ui-sans-serif', 'system-ui'] }, 
+                    colors: { primary: '#8b5cf6', dark: '#0b1120', card: '#1e293b' } 
+                } 
+            }
         }
     </script>
     <style>
-        ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
-        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .json-key { color: #c084fc; } .json-string { color: #86efac; } .json-number { color: #93c5fd; } .json-boolean { color: #fca5a5; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800 dark:bg-dark dark:text-slate-200 font-sans transition-colors duration-300">
+<body class="bg-slate-50 text-slate-800 dark:bg-dark dark:text-slate-200 font-sans transition-colors duration-300 min-h-screen flex flex-col">
 
     <nav class="fixed top-0 w-full z-50 h-16 glass flex items-center justify-between px-4 lg:px-8">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold">S</div>
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-violet-500/20">S</div>
             <div>
-                <h1 class="font-bold leading-none">Shanove-Api</h1>
-                <p class="text-[10px] text-green-500 font-mono">● All Systems Normal</p>
+                <h1 class="font-bold leading-none tracking-tight text-lg">Shanove<span class="text-violet-500">API</span></h1>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-mono">System Online</p>
+                </div>
             </div>
         </div>
-        <button onclick="document.documentElement.classList.toggle('dark')" class="p-2 rounded hover:bg-white/10"><i class="ph-bold ph-moon-stars text-xl"></i></button>
+        <button onclick="document.documentElement.classList.toggle('dark')" class="w-9 h-9 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center hover:text-violet-400 transition"><i class="ph-bold ph-moon-stars text-lg"></i></button>
     </nav>
 
-    <main class="pt-24 pb-10 px-4 max-w-7xl mx-auto min-h-screen">
-        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-2xl p-6 text-white shadow-xl mb-8 relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 class="text-2xl font-bold">Developer Portal</h2>
-                <p class="text-indigo-100 text-sm mt-1">Akses 100+ Rest API endpoint gratis untuk project kamu.</p>
+    <main class="flex-grow pt-24 pb-10 px-4 max-w-7xl mx-auto w-full">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-900 via-indigo-900 to-slate-900 p-8 text-white shadow-2xl border border-white/10 mb-8">
+            <div class="relative z-10 max-w-2xl">
+                <span class="px-2 py-1 rounded bg-violet-500/20 border border-violet-500/30 text-[10px] font-bold tracking-wider mb-3 inline-block text-violet-300">REST API PROVIDER</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Build Faster with Shanove.</h2>
+                <p class="text-slate-300 text-sm leading-relaxed">Akses ratusan endpoint API premium secara gratis. AI, Downloader, Editing Tools, dan banyak lagi.</p>
             </div>
-            <div class="absolute -right-5 -bottom-10 w-40 h-40 bg-white/20 blur-3xl rounded-full"></div>
+            <i class="ph-duotone ph-code absolute -right-6 -bottom-6 text-[180px] text-white/5 rotate-12"></i>
         </div>
 
-        <div class="sticky top-16 z-40 bg-gray-50 dark:bg-dark py-2 space-y-3 mb-6">
-            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="catFilters">
+        <div class="sticky top-16 z-40 bg-slate-50/95 dark:bg-dark/95 backdrop-blur py-2 space-y-3 mb-6 border-b border-transparent dark:border-white/5 transition-all">
+            <div class="flex flex-col md:flex-row gap-3 justify-between items-center">
+                <div class="flex gap-2 overflow-x-auto no-scrollbar w-full md:w-auto pb-1" id="catFilters"></div>
+                <div class="relative w-full md:w-64 group">
+                    <i class="ph-bold ph-magnifying-glass absolute left-3 top-2.5 text-slate-400 group-focus-within:text-violet-500 transition"></i>
+                    <input type="text" id="search" onkeyup="render()" placeholder="Cari endpoint..." class="w-full pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-card border border-slate-200 dark:border-white/10 focus:outline-none focus:border-violet-500 text-sm transition shadow-sm">
                 </div>
-            <div class="relative">
-                <i class="ph-bold ph-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
-                <input type="text" id="search" onkeyup="render()" placeholder="Cari API (ex: igdl, ai, game)..." class="w-full pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-cardDark border border-gray-200 dark:border-white/10 focus:outline-none focus:border-primary text-sm">
             </div>
         </div>
 
-        <div id="grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        <div id="empty" class="hidden text-center py-10 text-gray-500">Tidak ditemukan.</div>
+        <div id="grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+        <div id="empty" class="hidden flex-col items-center justify-center py-20 text-slate-400">
+            <i class="ph-duotone ph-ghost text-6xl mb-4 text-slate-600"></i><p>Endpoint tidak ditemukan.</p>
+        </div>
     </main>
 
-    <div id="modal" class="fixed inset-0 z-[60] bg-black/80 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target===this)closeModal()">
-        <div class="bg-white dark:bg-cardDark w-full max-w-md rounded-xl p-6 transform transition-all scale-95 opacity-0" id="modalBox">
-            <div class="flex justify-between mb-4">
-                <span id="mCat" class="text-[10px] font-bold bg-primary/20 text-primary px-2 py-0.5 rounded"></span>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500"><i class="ph-bold ph-x text-xl"></i></button>
+    <div id="modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-card w-full max-w-lg rounded-2xl shadow-2xl transform scale-95 transition-all duration-300 flex flex-col max-h-[90vh]" id="modalBox">
+            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50/50 dark:bg-white/[0.02]">
+                <div class="flex items-center gap-3">
+                    <div id="mIcon" class="w-10 h-10 rounded-lg bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xl"></div>
+                    <div>
+                        <h3 id="mTitle" class="text-lg font-bold text-slate-800 dark:text-white leading-tight">Title</h3>
+                        <div class="flex items-center gap-2 text-[10px] font-mono text-slate-500">
+                            <span class="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 font-bold border border-green-500/20">GET</span>
+                            <span id="mEndpoint">/api/index</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 flex items-center justify-center transition text-slate-400 hover:text-red-500"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
-            <h3 id="mTitle" class="text-xl font-bold mb-1"></h3>
-            <p id="mDesc" class="text-sm text-gray-500 mb-4"></p>
-            
-            <div class="bg-gray-100 dark:bg-black/30 p-3 rounded border border-gray-200 dark:border-white/10 relative group mb-4">
-                <code id="mUrl" class="text-[11px] font-mono break-all text-slate-600 dark:text-slate-300 block"></code>
-                <button onclick="copyUrl()" class="absolute top-2 right-2 text-gray-400 hover:text-white"><i class="ph-bold ph-copy"></i></button>
+            <div class="p-5 overflow-y-auto custom-scrollbar space-y-5">
+                <p id="mDesc" class="text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-black/20 p-3 rounded-lg border border-slate-200 dark:border-white/5"></p>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-slate-400 tracking-wider ml-1">Parameter: <span id="mParamName" class="text-violet-400">query</span></label>
+                    <div class="flex gap-2">
+                        <input type="text" id="mInput" class="flex-1 bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-sm focus:border-violet-500 focus:outline-none transition">
+                        <button onclick="executeApi()" id="btnExec" class="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-violet-600/20"><i class="ph-bold ph-play"></i> Test</button>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <pre id="mResult" class="bg-slate-900 text-xs font-mono p-4 rounded-xl h-48 overflow-auto border border-white/10 text-slate-300 custom-scrollbar whitespace-pre-wrap select-all">Waiting for input...</pre>
+                </div>
             </div>
-            <a id="mBtn" href="#" target="_blank" class="block w-full py-3 bg-primary text-white text-center rounded-lg font-bold text-sm hover:bg-indigo-500 transition">Test Endpoint</a>
         </div>
     </div>
 
     <script>
         // === DATABASE LENGKAP ===
         const db = [
-            // AI
-            {n:"Bard Google",t:"bard",c:"AI",p:"q",d:"Chat dengan Google Bard."},
-            {n:"C-Realtime",t:"c-realtime",c:"AI",p:"q",d:"AI Respon Cepat."},
-            {n:"ChatAI Multi",t:"chatai",c:"AI",p:"q",d:"GPT-4 & Claude gabungan."},
-            {n:"Gemini AI",t:"gemini",c:"AI",p:"text",d:"Google Gemini Chat."},
-            {n:"Deep AI",t:"deepai",c:"AI",p:"q",d:"Reasoning AI Model."},
-            {n:"Suno AI",t:"suno",c:"AI",p:"text",d:"Buat Musik/Lagu AI."},
-            {n:"Blackbox",t:"blackbox",c:"AI",p:"q",d:"AI Coding Helper."},
-            
-            // DOWNLOADER
-            {n:"Instagram DL",t:"igdl",c:"Downloader",p:"url",d:"Download Post/Reels IG."},
-            {n:"TikTok DL",t:"tiktok",c:"Downloader",p:"url",d:"TikTok No Watermark."},
-            {n:"YouTube MP3",t:"ytmp3",c:"Downloader",p:"url",d:"Audio YouTube."},
-            {n:"YouTube MP4",t:"ytmp4",c:"Downloader",p:"url",d:"Video YouTube HD."},
-            {n:"Facebook DL",t:"facebook",c:"Downloader",p:"url",d:"FB Video Downloader."},
-            {n:"Spotify DL",t:"spotify",c:"Downloader",p:"url",d:"Download Lagu Spotify."},
-            {n:"Twitter/X DL",t:"twitter",c:"Downloader",p:"url",d:"Video Twitter HD."},
-            
-            // IMAGE
-            {n:"Text2Img",t:"text2img",c:"Image",p:"text",d:"Generate gambar dari teks."},
-            {n:"Remini/HD",t:"remini",c:"Image",p:"url",d:"Perjelas foto buram."},
-            {n:"Remove BG",t:"removebg",c:"Image",p:"url",d:"Hapus background otomatis."},
-            {n:"To Anime",t:"toanime",c:"Image",p:"url",d:"Ubah foto jadi Anime."},
-            {n:"To Zombie",t:"tozombie",c:"Image",p:"url",d:"Filter wajah zombie."},
-            {n:"To Botak",t:"tobotak",c:"Image",p:"url",d:"Filter kepala botak."},
-            
-            // GAMES
-            {n:"Tebak Gambar",t:"tebakgambar",c:"Game",p:"",d:"Game tebak gambar seru."},
-            {n:"Asah Otak",t:"asahotak",c:"Game",p:"",d:"Kuis asah otak."},
-            {n:"Siapakah Aku",t:"siapakahaku",c:"Game",p:"",d:"Tebak-tebakan logika."},
-            {n:"Tebak Lagu",t:"tebaklagu",c:"Game",p:"",d:"Kuis lirik lagu."},
-            
-            // SEARCH
-            {n:"Pinterest",t:"pinterest",c:"Search",p:"q",d:"Cari gambar Pinterest."},
-            {n:"Spotify Search",t:"spotifysearch",c:"Search",p:"q",d:"Cari lagu Spotify."},
-            {n:"IG Stalk",t:"igstalk",c:"Search",p:"username",d:"Stalking profil IG."},
-            {n:"Lirik Lagu",t:"lirik",c:"Search",p:"q",d:"Cari lirik lagu."},
-            {n:"Google Image",t:"gimage",c:"Search",p:"q",d:"Pencarian gambar Google."},
-
-            // TOOLS
-            {n:"SS Web",t:"ssweb",c:"Tools",p:"url",d:"Screenshot website."},
-            {n:"Translate",t:"translate",c:"Tools",p:"text",d:"Terjemahan bahasa."},
-            {n:"KBBI",t:"kbbi",c:"Tools",p:"text",d:"Kamus Besar Bahasa Indonesia."},
-            {n:"Cuaca",t:"cuaca",c:"Tools",p:"city",d:"Info cuaca terkini."},
-            {n:"NGL Spam",t:"nglspam",c:"Tools",p:"url",d:"Spam link NGL."},
-            {n:"QR Maker",t:"qrcreate",c:"Tools",p:"text",d:"Buat QR Code custom."},
-            
-            // RANDOM
-            {n:"Cogan",t:"cogan",c:"Random",p:"",d:"Foto cowok ganteng random."},
-            {n:"Cewek",t:"cewek",c:"Random",p:"",d:"Foto cewek cantik random."},
-            {n:"Meme",t:"meme",c:"Random",p:"",d:"Meme lucu indonesia."},
-            {n:"Quotes",t:"quotes",c:"Random",p:"",d:"Kata-kata bijak acak."}
+            {c:'AI', n:'Google Gemini', t:'gemini', p:'text', d:'Chat pintar dengan model Google Gemini.'},
+            {c:'AI', n:'OpenAI GPT-4', t:'gpt4', p:'text', d:'Model bahasa tercanggih GPT-4.'},
+            {c:'AI', n:'SimiSimi', t:'simi', p:'text', d:'Chatbot lucu dan kadang ngeselin.'},
+            {c:'AI', n:'Blackbox AI', t:'blackbox', p:'text', d:'AI khusus untuk coding.'},
+            {c:'Downloader', n:'Tiktok No WM', t:'tiktok', p:'url', d:'Download video TikTok tanpa watermark.'},
+            {c:'Downloader', n:'Instagram DL', t:'igdl', p:'url', d:'Download Post, Reels, dan Story IG.'},
+            {c:'Downloader', n:'Facebook DL', t:'fbdl', p:'url', d:'Download video Facebook SD/HD.'},
+            {c:'Downloader', n:'YouTube MP3', t:'ytmp3', p:'url', d:'Convert video YouTube ke Audio.'},
+            {c:'Downloader', n:'YouTube MP4', t:'ytmp4', p:'url', d:'Download video YouTube resolusi tinggi.'},
+            {c:'Downloader', n:'Spotify DL', t:'spotify', p:'url', d:'Download lagu dari Spotify.'},
+            {c:'Downloader', n:'Twitter / X', t:'twitter', p:'url', d:'Download video dari Twitter/X.'},
+            {c:'Search', n:'Google Search', t:'google', p:'q', d:'Pencarian Google via API.'},
+            {c:'Search', n:'Pinterest', t:'pinterest', p:'q', d:'Cari inspirasi gambar di Pinterest.'},
+            {c:'Search', n:'Spotify Search', t:'spotifysearch', p:'q', d:'Cari metadata lagu Spotify.'},
+            {c:'Search', n:'YouTube Search', t:'yts', p:'q', d:'Cari video di YouTube.'},
+            {c:'Image', n:'Text to Image', t:'text2img', p:'text', d:'Generate gambar dari deskripsi teks.'},
+            {c:'Image', n:'Remini / HD', t:'remini', p:'url', d:'Upscale foto buram jadi HD.'},
+            {c:'Image', n:'Remove BG', t:'removebg', p:'url', d:'Hapus latar belakang foto otomatis.'},
+            {c:'Image', n:'To Anime', t:'toanime', p:'url', d:'Ubah foto wajah jadi anime.'},
+            {c:'Tools', n:'SS Web', t:'ssweb', p:'url', d:'Screenshot tampilan website (PC).'},
+            {c:'Tools', n:'Translate', t:'tr', p:'text', d:'Terjemahan bahasa otomatis.'},
+            {c:'Tools', n:'NGL Spam', t:'ngl', p:'url', d:'Kirim pesan spam ke link NGL.'},
+            {c:'Random', n:'Cogan', t:'cogan', p:'', d:'Foto cowok ganteng random.'},
+            {c:'Random', n:'Cewek', t:'cewek', p:'', d:'Foto cewek cantik random.'},
+            {c:'Random', n:'Quotes', t:'quotes', p:'', d:'Kata-kata bijak harian.'}
         ];
 
-        let activeCat = 'All';
+        let activeData = db, activeItem = null;
 
-        // === LOGIC ===
         function init() {
-            // Render Categories
             const cats = ['All', ...new Set(db.map(x => x.c))];
-            const btnContainer = document.getElementById('catFilters');
-            btnContainer.innerHTML = cats.map(c => 
-                `<button onclick="setCat('${c}')" class="px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition ${c==='All'?'bg-primary text-white':'bg-white dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10'}">${c}</button>`
+            document.getElementById('catFilters').innerHTML = cats.map(c => 
+                `<button onclick="filterCat('${c}')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border border-transparent transition-all ${c==='All'?'bg-violet-600 text-white':'bg-white dark:bg-white/5 hover:text-violet-500'}">${c}</button>`
             ).join('');
             render();
         }
 
-        function setCat(c) {
-            activeCat = c;
-            init(); // Re-render buttons active state
-        }
-
         function render() {
-            const q = document.getElementById('search').value.toLowerCase();
-            const filtered = db.filter(i => 
-                (activeCat === 'All' || i.c === activeCat) &&
-                (i.n.toLowerCase().includes(q) || i.d.toLowerCase().includes(q))
-            );
-
             const grid = document.getElementById('grid');
             const empty = document.getElementById('empty');
-            
+            const search = document.getElementById('search').value.toLowerCase();
             grid.innerHTML = '';
-            if(filtered.length === 0) {
-                empty.classList.remove('hidden');
-            } else {
-                empty.classList.add('hidden');
+            
+            const filtered = activeData.filter(i => i.n.toLowerCase().includes(search) || i.d.toLowerCase().includes(search));
+            
+            if(filtered.length === 0) { empty.classList.remove('hidden'); empty.classList.add('flex'); } 
+            else {
+                empty.classList.add('hidden'); empty.classList.remove('flex');
                 filtered.forEach(item => {
                     grid.innerHTML += `
-                    <div onclick="openModal('${item.t}')" class="bg-white dark:bg-cardDark p-5 rounded-xl border border-gray-100 dark:border-white/5 hover:border-primary cursor-pointer group transition shadow-sm hover:shadow-lg flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-3">
-                                <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center text-primary text-xl">
-                                    <i class="ph-bold ${getIcon(item.c)}"></i>
+                        <div onclick="openModal('${item.t}')" class="group bg-white dark:bg-card p-5 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-violet-500 cursor-pointer flex flex-col justify-between h-full relative overflow-hidden transition-all hover:shadow-xl">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-violet-500 text-2xl group-hover:scale-110 transition-transform"><i class="ph-duotone ${getIcon(item.c)}"></i></div>
+                                    <span class="text-[10px] font-bold uppercase text-slate-400 px-2 py-1 rounded-md bg-slate-50 dark:bg-white/5">${item.c}</span>
                                 </div>
-                                <span class="text-[10px] font-bold uppercase text-gray-400 border border-gray-200 dark:border-white/10 px-2 py-0.5 rounded">${item.c}</span>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-2 group-hover:text-violet-500 transition">${item.n}</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">${item.d}</p>
                             </div>
-                            <h3 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition">${item.n}</h3>
-                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${item.d}</p>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-white/5 flex items-center gap-2 text-[10px] font-mono text-gray-400">
-                            <span class="text-green-500 font-bold">GET</span> /api/${item.t}
-                        </div>
-                    </div>`;
+                            <div class="mt-5 pt-4 border-t border-slate-100 dark:border-white/5 flex justify-between items-center">
+                                <code class="text-[10px] font-mono text-slate-400">/api/${item.t}</code>
+                                <i class="ph-bold ph-arrow-right text-slate-300 group-hover:text-violet-500 transition"></i>
+                            </div>
+                        </div>`;
                 });
             }
         }
 
-        function getIcon(cat) {
-            if(cat==='AI') return 'ph-robot';
-            if(cat==='Downloader') return 'ph-download-simple';
-            if(cat==='Image') return 'ph-image';
-            if(cat==='Game') return 'ph-game-controller';
-            if(cat==='Search') return 'ph-magnifying-glass';
-            if(cat==='Tools') return 'ph-wrench';
-            return 'ph-shuffle';
+        function filterCat(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.className = btn.textContent === cat ? "cat-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-violet-600 text-white" : "cat-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-white dark:bg-white/5 hover:text-violet-500");
+            activeData = cat === 'All' ? db : db.filter(x => x.c === cat);
+            render();
         }
 
-        // Modal Logic
+        function getIcon(c) {
+            const map = {'AI':'ph-robot','Downloader':'ph-download-simple','Search':'ph-magnifying-glass','Image':'ph-image','Tools':'ph-wrench'};
+            return map[c] || 'ph-shuffle';
+        }
+
         const modal = document.getElementById('modal');
-        const box = document.getElementById('modalBox');
-
         function openModal(type) {
-            const item = db.find(x => x.t === type);
-            const baseUrl = "https://api-faa.my.id/api";
-            const fullUrl = `${baseUrl}/${item.t}?${item.p}=INPUT_DISINI`;
-
-            document.getElementById('mTitle').innerText = item.n;
-            document.getElementById('mDesc').innerText = item.d;
-            document.getElementById('mCat').innerText = item.c;
-            document.getElementById('mUrl').innerText = fullUrl;
-            document.getElementById('mBtn').href = fullUrl;
-
+            activeItem = db.find(x => x.t === type);
+            document.getElementById('mTitle').innerText = activeItem.n;
+            document.getElementById('mDesc').innerText = activeItem.d;
+            document.getElementById('mIcon').innerHTML = `<i class="ph-duotone ${getIcon(activeItem.c)}"></i>`;
+            document.getElementById('mParamName').innerText = activeItem.p || 'none';
+            document.getElementById('mInput').value = '';
+            document.getElementById('mInput').placeholder = activeItem.p ? `Masukkan ${activeItem.p}...` : 'Langsung gas!';
+            document.getElementById('mInput').disabled = !activeItem.p;
+            document.getElementById('mResult').innerText = 'Waiting for input...';
+            
             modal.classList.remove('hidden');
-            setTimeout(() => {
-                box.classList.remove('opacity-0', 'scale-95');
-                box.classList.add('scale-100');
-            }, 10);
+            setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('modalBox').classList.remove('scale-95'); }, 10);
         }
 
         function closeModal() {
-            box.classList.remove('scale-100');
-            box.classList.add('opacity-0', 'scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 200);
+            modal.classList.add('opacity-0'); document.getElementById('modalBox').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
-        function copyUrl() {
-            navigator.clipboard.writeText(document.getElementById('mUrl').innerText);
-            alert('URL Copied!');
+        async function executeApi() {
+            if(activeItem.p && !document.getElementById('mInput').value) return alert('Isi dulu bos!');
+            
+            const btn = document.getElementById('btnExec');
+            btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Loading...';
+            btn.disabled = true;
+
+            // DISINI KUNCINYA: TEMBAK KE FILE api/index.js KITA SENDIRI
+            const val = encodeURIComponent(document.getElementById('mInput').value);
+            const target = `/api/index?type=${activeItem.t}&${activeItem.p}=${val}`;
+
+            try {
+                const res = await fetch(target);
+                const data = await res.json();
+                document.getElementById('mResult').innerHTML = syntaxHighlight(data);
+            } catch (e) {
+                document.getElementById('mResult').innerText = "Error: " + e.message;
+            } finally {
+                btn.innerHTML = '<i class="ph-bold ph-play"></i> Test';
+                btn.disabled = false;
+            }
         }
 
-        // Start
+        function syntaxHighlight(json) {
+            if (typeof json != 'string') json = JSON.stringify(json, undefined, 2);
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'json-number';
+                if (/^"/.test(match)) cls = /:$/.test(match) ? 'json-key' : 'json-string';
+                else if (/true|false/.test(match)) cls = 'json-boolean';
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
         init();
+        modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
     </script>
 </body>
-  </html>
-  
+    </html>
+
