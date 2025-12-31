@@ -1,45 +1,59 @@
 export default async function handler(req, res) {
+    // 1. Setup Header agar bisa diakses dari frontend (CORS)
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // Ambil 'type' (nama endpoint) dan sisa parameter lainnya
-    const { type, ...params } = req.query;
+    // 2. Ambil parameter type (nama fitur) dan sisa parameternya
+    const { type, ...queryParams } = req.query;
 
+    // Jika user lupa memasukkan tipe fitur
     if (!type) {
         return res.status(400).json({
             status: false,
-            creator: "Shanove-Api",
-            message: "Parameter 'type' wajib. Contoh: /api?type=igdl&url=..."
+            creator: "Shanove-API",
+            message: "Parameter 'type' diperlukan. Contoh: /api/index?type=igdl&url=..."
         });
     }
 
     try {
-        // 1. Susun Query String dinamis (meneruskan url, text, q, dll)
-        const queryString = new URLSearchParams(params).toString();
-        
-        // 2. Request ke Faa
-        const targetUrl = `https://api-faa.my.id/faa/${type}?${queryString}`;
+        // 3. Susun URL untuk nembak ke server pusat (Faa)
+        // Kita meneruskan semua parameter (url, q, text, dll) yang dikirim user
+        const params = new URLSearchParams(queryParams).toString();
+        const targetUrl = `https://api-faa.my.id/api/${type}?${params}`;
+
+        // 4. Ambil data asli
         const response = await fetch(targetUrl);
         const data = await response.json();
 
-        // 3. Standarisasi Result (Biar rapi)
-        // Kita paksa outputnya selalu punya format: { status, creator, result }
-        const cleanResult = data.result || data.data || data.message || data;
+        // 5. MANIPULASI / RE-BRANDING
+        // Ini bagian penting untuk mengubah nama creator jadi punya kamu
+        
+        // Ubah di root object
+        if (data.creator) data.creator = "Shanove-API";
+        
+        // Ubah di dalam result (jika ada)
+        if (data.result && typeof data.result === 'object') {
+            if (data.result.creator) data.result.creator = "Shanove-API";
+        }
 
-        return res.status(200).json({
-            status: true,
-            creator: "Shanove-Api (P.R.O)",
-            type: type.toUpperCase(),
-            result: cleanResult
-        });
+        // Tambahkan tanda tangan server kamu
+        data.server_info = {
+            powered_by: "Shanove-Cluster",
+            status: "Active",
+            time: new Date().toLocaleTimeString()
+        };
+
+        // 6. Kirim data yang sudah diedit ke user
+        res.status(200).json(data);
 
     } catch (error) {
-        return res.status(500).json({
+        res.status(500).json({
             status: false,
-            creator: "Shanove-Api",
-            message: "Endpoint tidak ditemukan atau parameter salah.",
-            original_error: error.message
+            creator: "Shanove-API",
+            message: "Gagal mengambil data dari server pusat.",
+            error: error.message
         });
     }
 }
+
