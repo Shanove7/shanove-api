@@ -1,50 +1,45 @@
-// Endpoint Utama: https://domain-kamu.vercel.app/api?type={endpoint}&{params}
-// Contoh: /api?type=igdl&url=...
-// Contoh: /api?type=text2img&text=...
-
 export default async function handler(req, res) {
-    // 1. Setup CORS (Biar bisa dipanggil dari mana aja)
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Content-Type', 'application/json');
 
-    // 2. Ambil Parameter
-    // "type" adalah nama endpoint di api-faa (misal: igdl, tiktok, brat)
-    const { type, ...queryParams } = req.query;
+    // Ambil 'type' (nama endpoint) dan sisa parameter lainnya
+    const { type, ...params } = req.query;
 
     if (!type) {
         return res.status(400).json({
             status: false,
             creator: "Shanove-Api",
-            message: "Parameter 'type' wajib diisi. Contoh: ?type=igdl&url=..."
+            message: "Parameter 'type' wajib. Contoh: /api?type=igdl&url=..."
         });
     }
 
     try {
-        // 3. Susun Query String (Meneruskan semua parameter: url, text, q, dll)
-        const queryString = new URLSearchParams(queryParams).toString();
+        // 1. Susun Query String dinamis (meneruskan url, text, q, dll)
+        const queryString = new URLSearchParams(params).toString();
         
-        // 4. Tembak ke API-FAA (Proxy)
-        // Kita gunakan endpoint dinamis sesuai 'type'
+        // 2. Request ke Faa
         const targetUrl = `https://api-faa.my.id/faa/${type}?${queryString}`;
-        
         const response = await fetch(targetUrl);
         const data = await response.json();
 
-        // 5. Modifikasi Respon (Rebranding)
-        // Kita ganti creator asli dengan nama kamu
-        if (data) {
-            data.creator = "Shanove-Api (P.R.O)";
-        }
+        // 3. Standarisasi Result (Biar rapi)
+        // Kita paksa outputnya selalu punya format: { status, creator, result }
+        const cleanResult = data.result || data.data || data.message || data;
 
-        return res.status(200).json(data);
+        return res.status(200).json({
+            status: true,
+            creator: "Shanove-Api (P.R.O)",
+            type: type.toUpperCase(),
+            result: cleanResult
+        });
 
     } catch (error) {
         return res.status(500).json({
             status: false,
             creator: "Shanove-Api",
-            message: "Terjadi kesalahan pada server pusat (Upstream Error).",
-            error: error.message
+            message: "Endpoint tidak ditemukan atau parameter salah.",
+            original_error: error.message
         });
     }
 }
