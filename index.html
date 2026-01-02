@@ -1,243 +1,231 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shanove-Api | Developer Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { 
-                extend: { 
-                    fontFamily: { sans: ['ui-sans-serif', 'system-ui'] }, 
-                    colors: { primary: '#8b5cf6', dark: '#0b1120', card: '#1e293b' } 
-                } 
-            }
-        }
-    </script>
+    <title>Shanove API - Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .json-key { color: #c084fc; } .json-string { color: #86efac; } .json-number { color: #93c5fd; } .json-boolean { color: #fca5a5; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --primary: #8b5cf6; /* Violet */
+            --accent: #ec4899;  /* Pink */
+            --text: #e4e4e7;
+            --code-bg: #27272a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0 20px 40px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Header */
+        header {
+            padding: 60px 0 40px;
+            text-align: center;
+            border-bottom: 1px solid #3f3f46;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        /* Sections */
+        .card {
+            background: var(--surface);
+            border: 1px solid #3f3f46;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        h2 { margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .method { background: #22c55e; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #a1a1aa;
+            border: 1px solid #3f3f46;
+        }
+        
+        .url-box {
+            display: flex;
+            align-items: center;
+            background: var(--code-bg);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #3f3f46;
+        }
+        
+        .url-text { flex: 1; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #3f3f46; }
+        th { color: #fff; font-weight: 600; }
+        td { color: #a1a1aa; }
+        code { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+
+        /* Playground */
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg);
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            color: #fff;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+        
+        input:focus { outline: 2px solid var(--primary); border-color: transparent; }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background: #52525b; cursor: not-allowed; }
+
+        .json-res { color: #a5b4fc; }
+        footer { text-align: center; color: #52525b; margin-top: 50px; font-size: 0.9rem; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-dark dark:text-slate-200 font-sans transition-colors duration-300 min-h-screen flex flex-col">
+<body>
 
-    <nav class="fixed top-0 w-full z-50 h-16 glass flex items-center justify-between px-4 lg:px-8">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-violet-500/20">S</div>
-            <div>
-                <h1 class="font-bold leading-none tracking-tight text-lg">Shanove<span class="text-violet-500">API</span></h1>
-                <div class="flex items-center gap-1.5 mt-0.5">
-                    <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-mono">System Online</p>
-                </div>
-            </div>
-        </div>
-        <button onclick="document.documentElement.classList.toggle('dark')" class="w-9 h-9 rounded-full bg-slate-200 dark:bg-white/5 flex items-center justify-center hover:text-violet-400 transition"><i class="ph-bold ph-moon-stars text-lg"></i></button>
-    </nav>
+<div class="container">
+    <header>
+        <span class="badge">REST API v1.0</span>
+        <h1>Shanove API</h1>
+        <p>Free AI Coding Assistant API for Developers</p>
+    </header>
 
-    <main class="flex-grow pt-24 pb-10 px-4 max-w-7xl mx-auto w-full">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-900 via-indigo-900 to-slate-900 p-8 text-white shadow-2xl border border-white/10 mb-8">
-            <div class="relative z-10 max-w-2xl">
-                <span class="px-2 py-1 rounded bg-violet-500/20 border border-violet-500/30 text-[10px] font-bold tracking-wider mb-3 inline-block text-violet-300">REST API PROVIDER</span>
-                <h2 class="text-3xl md:text-4xl font-bold mb-2">Build Faster with Shanove.</h2>
-                <p class="text-slate-300 text-sm leading-relaxed">Akses ratusan endpoint API premium secara gratis. AI, Downloader, Editing Tools, dan banyak lagi.</p>
-            </div>
-            <i class="ph-duotone ph-code absolute -right-6 -bottom-6 text-[180px] text-white/5 rotate-12"></i>
+    <div class="card">
+        <h2><span class="method">GET</span> /api</h2>
+        <p>Gunakan endpoint ini untuk berinteraksi dengan AI Coding Assistant.</p>
+        
+        <div class="url-box">
+            <span class="url-text" id="apiUrl">https://your-domain.vercel.app/api</span>
         </div>
 
-        <div class="sticky top-16 z-40 bg-slate-50/95 dark:bg-dark/95 backdrop-blur py-2 space-y-3 mb-6 border-b border-transparent dark:border-white/5 transition-all">
-            <div class="flex flex-col md:flex-row gap-3 justify-between items-center">
-                <div class="flex gap-2 overflow-x-auto no-scrollbar w-full md:w-auto pb-1" id="catFilters"></div>
-                <div class="relative w-full md:w-64 group">
-                    <i class="ph-bold ph-magnifying-glass absolute left-3 top-2.5 text-slate-400 group-focus-within:text-violet-500 transition"></i>
-                    <input type="text" id="search" onkeyup="render()" placeholder="Cari endpoint..." class="w-full pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-card border border-slate-200 dark:border-white/10 focus:outline-none focus:border-violet-500 text-sm transition shadow-sm">
-                </div>
-            </div>
-        </div>
+        <h3>Parameters</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>prompt</code></td>
+                    <td>String</td>
+                    <td>Yes</td>
+                    <td>Pertanyaan atau instruksi coding.</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <div id="grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
-        <div id="empty" class="hidden flex-col items-center justify-center py-20 text-slate-400">
-            <i class="ph-duotone ph-ghost text-6xl mb-4 text-slate-600"></i><p>Endpoint tidak ditemukan.</p>
-        </div>
-    </main>
+        <h3>Example Response</h3>
+        <pre>{
+  "status": true,
+  "creator": "Shanove",
+  "data": {
+    "query": "Apa itu HTML?",
+    "answer": "HTML adalah..."
+  }
+}</pre>
+    </div>
 
-    <div id="modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
-        <div class="bg-white dark:bg-card w-full max-w-lg rounded-2xl shadow-2xl transform scale-95 transition-all duration-300 flex flex-col max-h-[90vh]" id="modalBox">
-            <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50/50 dark:bg-white/[0.02]">
-                <div class="flex items-center gap-3">
-                    <div id="mIcon" class="w-10 h-10 rounded-lg bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xl"></div>
-                    <div>
-                        <h3 id="mTitle" class="text-lg font-bold text-slate-800 dark:text-white leading-tight">Title</h3>
-                        <div class="flex items-center gap-2 text-[10px] font-mono text-slate-500">
-                            <span class="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 font-bold border border-green-500/20">GET</span>
-                            <span id="mEndpoint">/api/index</span>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 flex items-center justify-center transition text-slate-400 hover:text-red-500"><i class="ph-bold ph-x text-lg"></i></button>
-            </div>
-            <div class="p-5 overflow-y-auto custom-scrollbar space-y-5">
-                <p id="mDesc" class="text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-black/20 p-3 rounded-lg border border-slate-200 dark:border-white/5"></p>
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase text-slate-400 tracking-wider ml-1">Parameter: <span id="mParamName" class="text-violet-400">query</span></label>
-                    <div class="flex gap-2">
-                        <input type="text" id="mInput" class="flex-1 bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-sm focus:border-violet-500 focus:outline-none transition">
-                        <button onclick="executeApi()" id="btnExec" class="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-violet-600/20"><i class="ph-bold ph-play"></i> Test</button>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <pre id="mResult" class="bg-slate-900 text-xs font-mono p-4 rounded-xl h-48 overflow-auto border border-white/10 text-slate-300 custom-scrollbar whitespace-pre-wrap select-all">Waiting for input...</pre>
-                </div>
-            </div>
+    <div class="card">
+        <h2>⚡ Try It Out</h2>
+        <input type="text" id="demoInput" placeholder="Enter your prompt here... (e.g., Buatkan kode login js)">
+        <button onclick="testApi()" id="btnTest">Execute</button>
+
+        <div id="resultArea" style="margin-top: 20px; display:none;">
+            <h4>Response:</h4>
+            <pre id="jsonOutput" class="json-res"></pre>
         </div>
     </div>
 
-    <script>
-        // === DATABASE LENGKAP ===
-        const db = [
-            {c:'AI', n:'Google Gemini', t:'gemini', p:'text', d:'Chat pintar dengan model Google Gemini.'},
-            {c:'AI', n:'OpenAI GPT-4', t:'gpt4', p:'text', d:'Model bahasa tercanggih GPT-4.'},
-            {c:'AI', n:'SimiSimi', t:'simi', p:'text', d:'Chatbot lucu dan kadang ngeselin.'},
-            {c:'AI', n:'Blackbox AI', t:'blackbox', p:'text', d:'AI khusus untuk coding.'},
-            {c:'Downloader', n:'Tiktok No WM', t:'tiktok', p:'url', d:'Download video TikTok tanpa watermark.'},
-            {c:'Downloader', n:'Instagram DL', t:'igdl', p:'url', d:'Download Post, Reels, dan Story IG.'},
-            {c:'Downloader', n:'Facebook DL', t:'fbdl', p:'url', d:'Download video Facebook SD/HD.'},
-            {c:'Downloader', n:'YouTube MP3', t:'ytmp3', p:'url', d:'Convert video YouTube ke Audio.'},
-            {c:'Downloader', n:'YouTube MP4', t:'ytmp4', p:'url', d:'Download video YouTube resolusi tinggi.'},
-            {c:'Downloader', n:'Spotify DL', t:'spotify', p:'url', d:'Download lagu dari Spotify.'},
-            {c:'Downloader', n:'Twitter / X', t:'twitter', p:'url', d:'Download video dari Twitter/X.'},
-            {c:'Search', n:'Google Search', t:'google', p:'q', d:'Pencarian Google via API.'},
-            {c:'Search', n:'Pinterest', t:'pinterest', p:'q', d:'Cari inspirasi gambar di Pinterest.'},
-            {c:'Search', n:'Spotify Search', t:'spotifysearch', p:'q', d:'Cari metadata lagu Spotify.'},
-            {c:'Search', n:'YouTube Search', t:'yts', p:'q', d:'Cari video di YouTube.'},
-            {c:'Image', n:'Text to Image', t:'text2img', p:'text', d:'Generate gambar dari deskripsi teks.'},
-            {c:'Image', n:'Remini / HD', t:'remini', p:'url', d:'Upscale foto buram jadi HD.'},
-            {c:'Image', n:'Remove BG', t:'removebg', p:'url', d:'Hapus latar belakang foto otomatis.'},
-            {c:'Image', n:'To Anime', t:'toanime', p:'url', d:'Ubah foto wajah jadi anime.'},
-            {c:'Tools', n:'SS Web', t:'ssweb', p:'url', d:'Screenshot tampilan website (PC).'},
-            {c:'Tools', n:'Translate', t:'tr', p:'text', d:'Terjemahan bahasa otomatis.'},
-            {c:'Tools', n:'NGL Spam', t:'ngl', p:'url', d:'Kirim pesan spam ke link NGL.'},
-            {c:'Random', n:'Cogan', t:'cogan', p:'', d:'Foto cowok ganteng random.'},
-            {c:'Random', n:'Cewek', t:'cewek', p:'', d:'Foto cewek cantik random.'},
-            {c:'Random', n:'Quotes', t:'quotes', p:'', d:'Kata-kata bijak harian.'}
-        ];
+</div>
 
-        let activeData = db, activeItem = null;
+<footer>
+    &copy; 2024 Shanove API. All rights reserved.
+</footer>
 
-        function init() {
-            const cats = ['All', ...new Set(db.map(x => x.c))];
-            document.getElementById('catFilters').innerHTML = cats.map(c => 
-                `<button onclick="filterCat('${c}')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border border-transparent transition-all ${c==='All'?'bg-violet-600 text-white':'bg-white dark:bg-white/5 hover:text-violet-500'}">${c}</button>`
-            ).join('');
-            render();
-        }
+<script>
+    // Set URL otomatis sesuai domain saat ini
+    document.getElementById('apiUrl').innerText = window.location.origin + "/api";
 
-        function render() {
-            const grid = document.getElementById('grid');
-            const empty = document.getElementById('empty');
-            const search = document.getElementById('search').value.toLowerCase();
-            grid.innerHTML = '';
+    async function testApi() {
+        const input = document.getElementById('demoInput').value;
+        const btn = document.getElementById('btnTest');
+        const outputBox = document.getElementById('resultArea');
+        const jsonOut = document.getElementById('jsonOutput');
+
+        if (!input) return alert("Isi prompt dulu bang!");
+
+        btn.innerText = "Running...";
+        btn.disabled = true;
+        outputBox.style.display = 'block';
+        jsonOut.innerText = "Waiting for response...";
+
+        try {
+            const res = await fetch(`/api?prompt=${encodeURIComponent(input)}`);
+            const data = await res.json();
             
-            const filtered = activeData.filter(i => i.n.toLowerCase().includes(search) || i.d.toLowerCase().includes(search));
-            
-            if(filtered.length === 0) { empty.classList.remove('hidden'); empty.classList.add('flex'); } 
-            else {
-                empty.classList.add('hidden'); empty.classList.remove('flex');
-                filtered.forEach(item => {
-                    grid.innerHTML += `
-                        <div onclick="openModal('${item.t}')" class="group bg-white dark:bg-card p-5 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-violet-500 cursor-pointer flex flex-col justify-between h-full relative overflow-hidden transition-all hover:shadow-xl">
-                            <div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-violet-500 text-2xl group-hover:scale-110 transition-transform"><i class="ph-duotone ${getIcon(item.c)}"></i></div>
-                                    <span class="text-[10px] font-bold uppercase text-slate-400 px-2 py-1 rounded-md bg-slate-50 dark:bg-white/5">${item.c}</span>
-                                </div>
-                                <h3 class="font-bold text-slate-800 dark:text-white text-lg mb-2 group-hover:text-violet-500 transition">${item.n}</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">${item.d}</p>
-                            </div>
-                            <div class="mt-5 pt-4 border-t border-slate-100 dark:border-white/5 flex justify-between items-center">
-                                <code class="text-[10px] font-mono text-slate-400">/api/${item.t}</code>
-                                <i class="ph-bold ph-arrow-right text-slate-300 group-hover:text-violet-500 transition"></i>
-                            </div>
-                        </div>`;
-                });
-            }
+            // Pretty print JSON
+            jsonOut.innerText = JSON.stringify(data, null, 2);
+        } catch (err) {
+            jsonOut.innerText = "Error: " + err.message;
+        } finally {
+            btn.innerText = "Execute";
+            btn.disabled = false;
         }
+    }
+</script>
 
-        function filterCat(cat) {
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.className = btn.textContent === cat ? "cat-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-violet-600 text-white" : "cat-btn px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-white dark:bg-white/5 hover:text-violet-500");
-            activeData = cat === 'All' ? db : db.filter(x => x.c === cat);
-            render();
-        }
-
-        function getIcon(c) {
-            const map = {'AI':'ph-robot','Downloader':'ph-download-simple','Search':'ph-magnifying-glass','Image':'ph-image','Tools':'ph-wrench'};
-            return map[c] || 'ph-shuffle';
-        }
-
-        const modal = document.getElementById('modal');
-        function openModal(type) {
-            activeItem = db.find(x => x.t === type);
-            document.getElementById('mTitle').innerText = activeItem.n;
-            document.getElementById('mDesc').innerText = activeItem.d;
-            document.getElementById('mIcon').innerHTML = `<i class="ph-duotone ${getIcon(activeItem.c)}"></i>`;
-            document.getElementById('mParamName').innerText = activeItem.p || 'none';
-            document.getElementById('mInput').value = '';
-            document.getElementById('mInput').placeholder = activeItem.p ? `Masukkan ${activeItem.p}...` : 'Langsung gas!';
-            document.getElementById('mInput').disabled = !activeItem.p;
-            document.getElementById('mResult').innerText = 'Waiting for input...';
-            
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('modalBox').classList.remove('scale-95'); }, 10);
-        }
-
-        function closeModal() {
-            modal.classList.add('opacity-0'); document.getElementById('modalBox').classList.add('scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-
-        async function executeApi() {
-            if(activeItem.p && !document.getElementById('mInput').value) return alert('Isi dulu bos!');
-            
-            const btn = document.getElementById('btnExec');
-            btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Loading...';
-            btn.disabled = true;
-
-            // DISINI KUNCINYA: TEMBAK KE FILE api/index.js KITA SENDIRI
-            const val = encodeURIComponent(document.getElementById('mInput').value);
-            const target = `/api/index?type=${activeItem.t}&${activeItem.p}=${val}`;
-
-            try {
-                const res = await fetch(target);
-                const data = await res.json();
-                document.getElementById('mResult').innerHTML = syntaxHighlight(data);
-            } catch (e) {
-                document.getElementById('mResult').innerText = "Error: " + e.message;
-            } finally {
-                btn.innerHTML = '<i class="ph-bold ph-play"></i> Test';
-                btn.disabled = false;
-            }
-        }
-
-        function syntaxHighlight(json) {
-            if (typeof json != 'string') json = JSON.stringify(json, undefined, 2);
-            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                let cls = 'json-number';
-                if (/^"/.test(match)) cls = /:$/.test(match) ? 'json-key' : 'json-string';
-                else if (/true|false/.test(match)) cls = 'json-boolean';
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
-        }
-
-        init();
-        modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
-    </script>
 </body>
-    </html>
+</html>
 
