@@ -1,59 +1,52 @@
 export default async function handler(req, res) {
-    // 1. Setup Header agar bisa diakses dari frontend (CORS)
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  // 1. Setup CORS agar bisa ditembak dari website mana saja
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Content-Type', 'application/json');
 
-    // 2. Ambil parameter type (nama fitur) dan sisa parameternya
-    const { type, ...queryParams } = req.query;
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-    // Jika user lupa memasukkan tipe fitur
-    if (!type) {
-        return res.status(400).json({
-            status: false,
-            creator: "Shanove-API",
-            message: "Parameter 'type' diperlukan. Contoh: /api/index?type=igdl&url=..."
-        });
-    }
+  const { prompt } = req.query;
 
-    try {
-        // 3. Susun URL untuk nembak ke server pusat (Faa)
-        // Kita meneruskan semua parameter (url, q, text, dll) yang dikirim user
-        const params = new URLSearchParams(queryParams).toString();
-        const targetUrl = `https://api-faa.my.id/api/${type}?${params}`;
+  // 2. Validasi Parameter
+  if (!prompt) {
+    return res.status(400).json({
+      status: false,
+      creator: "Shanove",
+      message: "Parameter 'prompt' is required."
+    });
+  }
 
-        // 4. Ambil data asli
-        const response = await fetch(targetUrl);
-        const data = await response.json();
+  try {
+    // 3. Request ke Upstream API (Hidden Key)
+    const apiKey = 'RS-e5vtb61yow'; // Key Pribadi
+    const targetUrl = `https://api.ferdev.my.id/ai/aicoding?apikey=${apiKey}&prompt=${encodeURIComponent(prompt)}`;
+    
+    const response = await fetch(targetUrl);
+    const data = await response.json();
 
-        // 5. MANIPULASI / RE-BRANDING
-        // Ini bagian penting untuk mengubah nama creator jadi punya kamu
-        
-        // Ubah di root object
-        if (data.creator) data.creator = "Shanove-API";
-        
-        // Ubah di dalam result (jika ada)
-        if (data.result && typeof data.result === 'object') {
-            if (data.result.creator) data.result.creator = "Shanove-API";
-        }
+    // 4. Bungkus ulang Response (Re-branding)
+    // Menghilangkan jejak API asli dan menampilkan Shanove
+    const finalResponse = {
+      status: true,
+      creator: "Shanove",
+      data: {
+        query: prompt,
+        answer: data.result || "No response from AI"
+      }
+    };
 
-        // Tambahkan tanda tangan server kamu
-        data.server_info = {
-            powered_by: "Shanove-Cluster",
-            status: "Active",
-            time: new Date().toLocaleTimeString()
-        };
+    res.status(200).json(finalResponse);
 
-        // 6. Kirim data yang sudah diedit ke user
-        res.status(200).json(data);
-
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            creator: "Shanove-API",
-            message: "Gagal mengambil data dari server pusat.",
-            error: error.message
-        });
-    }
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      creator: "Shanove",
+      message: "Internal Server Error"
+    });
+  }
 }
 
