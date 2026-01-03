@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shanove - AI Downloader</title>
+    <title>Shanove Downloader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -14,17 +14,17 @@
                 extend: {
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
                     },
                     colors: {
-                        bg: '#09090b',
-                        surface: '#18181b',
-                        primary: '#3b82f6',
-                        accent: '#06b6d4',
+                        bg: '#09090b', // Zinc 950
+                        card: '#18181b', // Zinc 900
+                        primary: '#3b82f6', // Blue 500
+                        cyan: '#06b6d4', // Cyan 500
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
                     },
                     keyframes: {
                         fadeIn: {
@@ -34,10 +34,6 @@
                         slideUp: {
                             '0%': { opacity: 0, transform: 'translateY(20px)' },
                             '100%': { opacity: 1, transform: 'translateY(0)' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 10px rgba(6, 182, 212, 0.0)' },
-                            '50%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.3)' },
                         }
                     }
                 }
@@ -47,378 +43,378 @@
     <style>
         body {
             background-color: #09090b;
-            /* Modern Mesh Gradient */
+            /* Background halus */
             background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
             -webkit-tap-highlight-color: transparent;
         }
-        
-        /* Smooth Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
 
-        .glass-card {
-            background: rgba(24, 24, 27, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* Glass Effect Simple */
+        .glass {
+            background: rgba(24, 24, 27, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .input-glow:focus-within {
-            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
-            border-color: rgba(6, 182, 212, 0.5);
-        }
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
 
-        /* Loading Skeleton Animation */
-        .skeleton {
-            background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
+        /* Syntax Highlighting Mockup */
+        .hl-key { color: #38bdf8; }
+        .hl-str { color: #a5f3fc; }
+        .hl-num { color: #f472b6; }
     </style>
 </head>
-<body class="text-zinc-100 min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
+<body class="text-zinc-100 min-h-screen flex flex-col font-sans">
 
-    <!-- Header / Navbar -->
-    <nav class="fixed top-0 w-full z-50 glass-card border-b border-white/5 px-4 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+    <!-- HEADER / NAVBAR (Clean, No Menu) -->
+    <header class="fixed top-0 w-full z-50 glass h-16 px-4 flex items-center justify-between shadow-lg shadow-black/20">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-blue-500/20 shadow-lg">
                 <i class="fa-solid fa-bolt text-white text-sm"></i>
             </div>
-            <span class="font-bold text-lg tracking-tight">Shanove</span>
+            <div>
+                <h1 class="font-bold text-lg leading-none tracking-tight">Shanove</h1>
+                <p class="text-[10px] text-zinc-400 font-medium tracking-wide">AI DOWNLOADER</p>
+            </div>
         </div>
-        <div class="flex gap-3">
-            <a href="https://whatsapp.com/channel/0029VaoNo0R1CYoT04F7Wj15" target="_blank" class="w-9 h-9 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-green-400 hover:bg-zinc-700 transition-all">
+        
+        <!-- Social Icons Only -->
+        <div class="flex gap-2">
+            <a href="https://whatsapp.com/channel/0029VaoNo0R1CYoT04F7Wj15" target="_blank" class="w-9 h-9 rounded-full bg-zinc-800 border border-white/5 flex items-center justify-center text-zinc-400 hover:text-green-400 hover:bg-zinc-700 transition-all">
                 <i class="fa-brands fa-whatsapp"></i>
             </a>
-            <a href="https://instagram.com/shanove_id" target="_blank" class="w-9 h-9 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-pink-400 hover:bg-zinc-700 transition-all">
+            <a href="https://instagram.com/shanove_id" target="_blank" class="w-9 h-9 rounded-full bg-zinc-800 border border-white/5 flex items-center justify-center text-zinc-400 hover:text-pink-400 hover:bg-zinc-700 transition-all">
                 <i class="fa-brands fa-instagram"></i>
             </a>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow pt-24 pb-20 px-4 w-full max-w-lg mx-auto relative overflow-hidden">
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow pt-24 pb-8 px-4 w-full max-w-md mx-auto relative">
         
-        <!-- Tab Switcher (Segmented Control) -->
-        <div class="bg-zinc-800/50 p-1 rounded-xl flex mb-8 relative border border-white/5">
-            <div id="tab-indicator" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-zinc-700 rounded-lg shadow-sm transition-all duration-300 ease-out z-0"></div>
+        <!-- TAB SWITCHER (App Style) -->
+        <div class="glass p-1 rounded-xl flex mb-8 relative">
+            <!-- Sliding Background -->
+            <div id="tab-bg" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-zinc-700 rounded-lg shadow-md transition-all duration-300 ease-out z-0"></div>
             
-            <button onclick="switchTab('downloader')" class="flex-1 relative z-10 py-2.5 text-sm font-medium text-center transition-colors duration-200" id="btn-dl">
+            <button onclick="switchTab('app')" id="tab-app" class="flex-1 relative z-10 py-2.5 text-sm font-bold text-white text-center transition-colors">
                 Downloader
             </button>
-            <button onclick="switchTab('docs')" class="flex-1 relative z-10 py-2.5 text-sm font-medium text-center text-zinc-400 transition-colors duration-200" id="btn-docs">
+            <button onclick="switchTab('docs')" id="tab-docs" class="flex-1 relative z-10 py-2.5 text-sm font-medium text-zinc-400 text-center transition-colors">
                 API Docs
             </button>
         </div>
 
-        <!-- VIEW: DOWNLOADER -->
-        <section id="view-downloader" class="animate-fade-in">
-            <!-- Hero Text -->
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-500">
-                    Paste & Save.
-                </h1>
-                <p class="text-zinc-500 text-sm mt-1">TikTok, IG, YT, Spotify Downloader</p>
-            </div>
-
+        <!-- === VIEW: APP DOWNLOADER === -->
+        <section id="view-app" class="animate-fade-in space-y-6">
+            
             <!-- Input Area -->
-            <div class="glass-card rounded-2xl p-1.5 shadow-2xl input-glow transition-all duration-300 mb-6">
-                <div class="relative flex items-center">
-                    <div class="pl-4 text-zinc-500">
-                        <i class="fa-solid fa-link"></i>
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-zinc-500 ml-1 uppercase tracking-wider">Target Link</label>
+                <div class="glass rounded-2xl p-1.5 focus-within:ring-2 focus-within:ring-cyan-500/50 transition-all shadow-xl">
+                    <div class="relative flex items-center">
+                        <div class="pl-3.5 text-zinc-500"><i class="fa-solid fa-link"></i></div>
+                        <input type="text" id="urlInput" placeholder="Tempel link TikTok/IG/YT..." 
+                            class="w-full bg-transparent border-none text-white p-3.5 focus:ring-0 placeholder-zinc-600 text-sm font-medium">
+                        <button onclick="pasteLink('urlInput')" class="absolute right-2 px-3 py-1.5 text-[10px] font-bold bg-zinc-800 text-zinc-400 rounded-lg border border-white/5 active:scale-95 transition-transform">
+                            PASTE
+                        </button>
                     </div>
-                    <input type="text" id="urlInput" placeholder="Tempel link video..." 
-                        class="w-full bg-transparent border-none text-white p-4 focus:ring-0 placeholder-zinc-600 text-sm font-medium">
-                    <button onclick="pasteLink()" class="absolute right-2 px-3 py-1.5 text-xs font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-400 rounded-lg transition-colors">
-                        Paste
-                    </button>
                 </div>
             </div>
 
             <!-- Action Button -->
             <button onclick="fetchData()" id="btnAction"
-                class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-4 rounded-xl shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 group">
-                <span class="group-hover:tracking-wider transition-all">Download Media</span>
-                <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
+                <span>Download Media</span>
+                <i class="fa-solid fa-bolt group-hover:animate-pulse"></i>
             </button>
 
             <!-- Loading State -->
-            <div id="loader" class="hidden mt-8 space-y-3 animate-fade-in">
-                <div class="flex items-center gap-3">
-                    <div class="w-16 h-16 rounded-xl skeleton shrink-0"></div>
-                    <div class="flex-1 space-y-2">
-                        <div class="h-4 w-3/4 rounded skeleton"></div>
-                        <div class="h-3 w-1/2 rounded skeleton"></div>
-                    </div>
-                </div>
+            <div id="loader" class="hidden py-8 text-center animate-fade-in">
+                <div class="w-10 h-10 border-4 border-zinc-800 border-t-cyan-500 rounded-full animate-spin mx-auto mb-3"></div>
+                <p class="text-xs text-zinc-500 font-mono">Memproses data...</p>
             </div>
 
             <!-- Result Card -->
-            <div id="resultCard" class="hidden mt-6 animate-slide-up">
-                <div class="glass-card rounded-2xl p-4 border border-blue-500/20 relative overflow-hidden">
-                    <!-- Background Blur Image -->
-                    <div id="bgBlur" class="absolute inset-0 opacity-20 blur-xl bg-center bg-cover"></div>
-                    
-                    <div class="relative z-10 flex gap-4">
-                        <img id="thumb" src="" class="w-20 h-20 object-cover rounded-xl shadow-lg bg-zinc-800 shrink-0">
+            <div id="resultCard" class="hidden animate-slide-up">
+                <div class="glass rounded-2xl overflow-hidden border border-cyan-500/20">
+                    <div class="p-4 flex gap-4">
+                        <img id="thumb" src="" class="w-20 h-20 object-cover rounded-xl bg-zinc-800 shrink-0 border border-white/10">
                         <div class="flex-1 min-w-0 flex flex-col justify-center">
-                            <h3 id="vidTitle" class="font-bold text-white text-sm line-clamp-2 leading-snug">Video Title</h3>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">SHANOVE</span>
-                                <span class="text-[10px] text-zinc-500" id="platformBadge">TIKTOK</span>
+                            <h3 id="vidTitle" class="font-bold text-sm text-white line-clamp-2 leading-snug mb-1">Title</h3>
+                            <div class="flex items-center gap-2">
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-zinc-400 border border-white/5" id="vidSource">TIKTOK</span>
+                                <span class="text-[10px] text-cyan-400 font-medium">by Shanove</span>
                             </div>
                         </div>
                     </div>
-
-                    <div class="mt-4 pt-4 border-t border-white/5 grid gap-2" id="dlButtons">
-                        <!-- JS Injected Buttons -->
+                    
+                    <div id="dlButtons" class="bg-zinc-900/50 p-3 grid gap-2 border-t border-white/5">
+                        <!-- Buttons injected here -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW: DOCS -->
-        <section id="view-docs" class="hidden animate-fade-in">
-            <div class="space-y-6">
+        <!-- === VIEW: API DOCS === -->
+        <section id="view-docs" class="hidden animate-fade-in space-y-6">
+            
+            <!-- Endpoint Card -->
+            <div class="glass rounded-2xl p-5 border border-white/5">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-code text-cyan-400"></i> Endpoint
+                    </h2>
+                    <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-bold">GET</span>
+                </div>
                 
-                <div class="glass-card p-6 rounded-2xl text-center">
-                    <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <i class="fa-solid fa-code text-cyan-400"></i>
-                    </div>
-                    <h2 class="font-bold text-lg">Developer API</h2>
-                    <p class="text-zinc-500 text-sm mt-1">Integrasikan downloader Shanove ke aplikasimu.</p>
-                </div>
-
-                <!-- Endpoint -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-end px-1">
-                        <label class="text-xs font-bold text-zinc-500 uppercase">Endpoint</label>
-                        <span class="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded border border-green-500/30">GET</span>
-                    </div>
-                    <div class="glass-card p-3 rounded-xl flex items-center justify-between group cursor-pointer" onclick="copyToClipboard('https://api.shanove.my.id/downloader/allinone')">
-                        <code class="text-xs text-blue-300 font-mono truncate mr-2">https://api.shanove.my.id/downloader/allinone</code>
-                        <i class="fa-regular fa-copy text-zinc-600 group-hover:text-white transition-colors"></i>
+                <div class="bg-zinc-950 rounded-xl border border-white/10 p-3 mb-4 group cursor-pointer active:scale-[0.99] transition-transform" onclick="copyText('https://api.shanove.my.id/downloader/allinone')">
+                    <div class="flex justify-between items-center">
+                        <code class="text-xs font-mono text-blue-400 truncate pr-2">api.shanove.my.id/downloader/allinone</code>
+                        <i class="fa-regular fa-copy text-zinc-500 text-xs"></i>
                     </div>
                 </div>
 
-                <!-- Parameters -->
-                <div class="space-y-3">
-                    <label class="text-xs font-bold text-zinc-500 uppercase px-1">Parameters</label>
-                    
-                    <div class="glass-card p-3 rounded-xl border-l-2 border-cyan-500 flex items-center justify-between">
-                        <div>
-                            <div class="text-sm font-bold text-white">link</div>
-                            <div class="text-xs text-zinc-500">URL Video (TikTok, IG, YT)</div>
-                        </div>
-                        <span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded">Required</span>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between py-2 border-b border-white/5">
+                        <span class="text-zinc-400 font-mono">link</span>
+                        <span class="text-red-400 font-bold">Required</span>
                     </div>
-
-                    <div class="glass-card p-3 rounded-xl border-l-2 border-zinc-700 flex items-center justify-between">
-                        <div>
-                            <div class="text-sm font-bold text-white">apikey</div>
-                            <div class="text-xs text-zinc-500">Default: 'shanove'</div>
-                        </div>
-                        <span class="text-[10px] bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded">Optional</span>
-                    </div>
-                </div>
-
-                <!-- JSON Response Preview -->
-                <div class="space-y-2">
-                    <label class="text-xs font-bold text-zinc-500 uppercase px-1">Response Example</label>
-                    <div class="bg-[#0D0D0F] p-4 rounded-xl border border-white/5 overflow-x-auto">
-<pre class="text-[10px] font-mono leading-relaxed">
-<span class="text-purple-400">{</span>
-  <span class="text-blue-400">"status"</span>: <span class="text-yellow-400">200</span>,
-  <span class="text-blue-400">"author"</span>: <span class="text-green-400">"Shanove"</span>,
-  <span class="text-blue-400">"data"</span>: <span class="text-purple-400">{</span>
-    <span class="text-blue-400">"title"</span>: <span class="text-green-400">"Viral Video..."</span>,
-    <span class="text-blue-400">"source"</span>: <span class="text-green-400">"tiktok"</span>,
-    <span class="text-blue-400">"medias"</span>: <span class="text-zinc-500">[...]</span>
-  <span class="text-purple-400">}</span>
-<span class="text-purple-400">}</span>
-</pre>
+                    <div class="flex justify-between py-2">
+                        <span class="text-zinc-400 font-mono">apikey</span>
+                        <span class="text-zinc-500">Default: 'shanove'</span>
                     </div>
                 </div>
             </div>
+
+            <!-- API Tester (Playground) -->
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-zinc-500 ml-1 uppercase tracking-wider">Test Endpoint</label>
+                <div class="flex gap-2">
+                    <input type="text" id="testInput" placeholder="Link video..." 
+                        class="flex-1 bg-zinc-900/50 border border-white/10 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    <button onclick="testApi()" id="btnTest" class="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-3 rounded-xl text-xs font-bold border border-white/10 transition-colors">
+                        SEND
+                    </button>
+                </div>
+                
+                <!-- JSON Output -->
+                <div class="relative bg-zinc-950 rounded-xl border border-white/10 p-4 min-h-[100px] font-mono text-[10px] overflow-x-auto">
+                    <pre id="jsonOutput" class="text-zinc-500">// Response JSON akan muncul di sini...</pre>
+                </div>
+            </div>
+
         </section>
 
     </main>
 
-    <!-- Toast Notification (Replacement for Alert) -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-800 border border-zinc-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-10 z-[100] w-[90%] max-w-sm pointer-events-none">
-        <div id="toast-icon" class="text-blue-400"></div>
-        <p id="toast-msg" class="text-sm font-medium">Notification</p>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-800 border border-white/10 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-10 z-50 pointer-events-none w-[90%] max-w-sm">
+        <div id="toast-icon"></div>
+        <p id="toast-msg" class="text-sm font-medium"></p>
     </div>
 
-    <!-- Script -->
     <script>
-        // --- CONFIGURATION ---
-        const REAL_API_BASE = "https://api.ferdev.my.id/downloader/allinone";
-        const REAL_API_KEY = "RS-e5vtb61yow"; 
-        const CUSTOM_AUTHOR = "Shanove";
+        // CONFIG
+        const API_URL = "https://api.ferdev.my.id/downloader/allinone";
+        const API_KEY = "RS-e5vtb61yow";
+        const AUTHOR = "Shanove";
 
-        // --- UI LOGIC ---
+        // TAB SWITCHER
         function switchTab(tab) {
-            const dlView = document.getElementById('view-downloader');
+            const appView = document.getElementById('view-app');
             const docsView = document.getElementById('view-docs');
-            const indicator = document.getElementById('tab-indicator');
-            const btnDl = document.getElementById('btn-dl');
-            const btnDocs = document.getElementById('btn-docs');
+            const tabBg = document.getElementById('tab-bg');
+            const btnApp = document.getElementById('tab-app');
+            const btnDocs = document.getElementById('tab-docs');
 
-            if (tab === 'downloader') {
-                dlView.classList.remove('hidden');
+            if(tab === 'app') {
+                appView.classList.remove('hidden');
                 docsView.classList.add('hidden');
-                indicator.style.transform = 'translateX(0)';
-                btnDl.className = "flex-1 relative z-10 py-2.5 text-sm font-bold text-center text-white transition-colors duration-200";
-                btnDocs.className = "flex-1 relative z-10 py-2.5 text-sm font-medium text-center text-zinc-400 transition-colors duration-200";
+                tabBg.style.transform = 'translateX(0)';
+                
+                btnApp.className = "flex-1 relative z-10 py-2.5 text-sm font-bold text-white text-center transition-colors";
+                btnDocs.className = "flex-1 relative z-10 py-2.5 text-sm font-medium text-zinc-400 text-center transition-colors";
             } else {
-                dlView.classList.add('hidden');
+                appView.classList.add('hidden');
                 docsView.classList.remove('hidden');
-                indicator.style.transform = 'translateX(100%)';
-                btnDocs.className = "flex-1 relative z-10 py-2.5 text-sm font-bold text-center text-white transition-colors duration-200";
-                btnDl.className = "flex-1 relative z-10 py-2.5 text-sm font-medium text-center text-zinc-400 transition-colors duration-200";
+                tabBg.style.transform = 'translateX(100%)';
+
+                btnDocs.className = "flex-1 relative z-10 py-2.5 text-sm font-bold text-white text-center transition-colors";
+                btnApp.className = "flex-1 relative z-10 py-2.5 text-sm font-medium text-zinc-400 text-center transition-colors";
             }
         }
 
-        async function pasteLink() {
-            try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('urlInput').value = text;
-                showToast("Link berhasil ditempel!", "success");
-            } catch (err) {
-                showToast("Gagal akses clipboard.", "error");
-            }
-        }
-
-        function showToast(msg, type = "info") {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            const text = document.getElementById('toast-msg');
-
-            text.textContent = msg;
-            
-            if(type === 'error') icon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-red-500"></i>';
-            else if(type === 'success') icon.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
-            else icon.innerHTML = '<i class="fa-solid fa-circle-info text-blue-500"></i>';
-
-            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-            }, 3000);
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            showToast("Endpoint disalin!", "success");
-        }
-
-        // --- FETCH LOGIC ---
+        // DOWNLOADER LOGIC
         async function fetchData() {
-            const input = document.getElementById('urlInput');
-            const link = input.value.trim();
-            const loader = document.getElementById('loader');
-            const resultCard = document.getElementById('resultCard');
-            const btn = document.getElementById('btnAction');
+            const link = document.getElementById('urlInput').value.trim();
+            if(!link) return showToast("Masukkan link dulu!", "error");
 
-            if (!link) {
-                showToast("Masukkan link dulu ya!", "error");
-                input.focus();
-                return;
-            }
-
-            // State: Loading
-            loader.classList.remove('hidden');
-            resultCard.classList.add('hidden');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
-            btn.classList.add('opacity-75');
+            // UI Loading
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('btnAction').disabled = true;
+            document.getElementById('btnAction').classList.add('opacity-50');
 
             try {
-                const targetUrl = `${REAL_API_BASE}?link=${encodeURIComponent(link)}&apikey=${REAL_API_KEY}`;
-                const response = await fetch(targetUrl);
-                const json = await response.json();
+                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}&apikey=${API_KEY}`);
+                const json = await res.json();
 
-                if (json.data && !json.data.error) {
-                    // Masking Author
-                    json.data.author = CUSTOM_AUTHOR;
+                if(json.data && !json.data.error) {
+                    json.data.author = AUTHOR; // Masking
                     renderResult(json.data);
-                    showToast("Media berhasil ditemukan!", "success");
+                    showToast("Media ditemukan!", "success");
                 } else {
-                    showToast("Media tidak ditemukan / Private.", "error");
+                    showToast("Media tidak ditemukan.", "error");
                 }
-
-            } catch (error) {
-                console.error(error);
-                showToast("Koneksi bermasalah.", "error");
+            } catch (e) {
+                showToast("Gagal mengambil data.", "error");
             } finally {
-                loader.classList.add('hidden');
-                btn.disabled = false;
-                btn.innerHTML = '<span>Download Media</span><i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform"></i>';
-                btn.classList.remove('opacity-75');
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('btnAction').disabled = false;
+                document.getElementById('btnAction').classList.remove('opacity-50');
             }
         }
 
         function renderResult(data) {
-            document.getElementById('thumb').src = data.thumbnail || 'https://via.placeholder.com/150';
-            document.getElementById('bgBlur').style.backgroundImage = `url(${data.thumbnail})`;
-            document.getElementById('vidTitle').textContent = data.title || 'Untitled Media';
-            document.getElementById('platformBadge').textContent = (data.source || 'UNK').toUpperCase();
+            document.getElementById('thumb').src = data.thumbnail || '';
+            document.getElementById('vidTitle').textContent = data.title || 'No Title';
+            document.getElementById('vidSource').textContent = (data.source || 'UNK').toUpperCase();
 
-            const btnContainer = document.getElementById('dlButtons');
-            btnContainer.innerHTML = '';
+            const container = document.getElementById('dlButtons');
+            container.innerHTML = '';
 
-            if (data.medias && data.medias.length > 0) {
+            if(data.medias) {
                 data.medias.forEach(media => {
-                    const btn = document.createElement('a');
-                    btn.href = media.url;
-                    btn.target = "_blank";
-                    
+                    const btn = document.createElement('button');
                     let label = "Download";
-                    let meta = media.extension.toUpperCase();
+                    let style = "bg-zinc-800 text-zinc-300 border-zinc-700";
                     let icon = "fa-download";
-                    let styleClass = "bg-zinc-800 hover:bg-zinc-700 text-zinc-300";
 
-                    if (media.type === 'video') {
+                    if(media.type === 'video') {
                         icon = "fa-video";
-                        if (media.quality.includes('no_watermark')) {
+                        if(media.quality.includes('no_watermark')) {
                             label = "Download No WM";
-                            styleClass = "bg-blue-600 hover:bg-blue-500 text-white border-none shadow-lg shadow-blue-500/20";
+                            style = "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/20";
                         } else {
                             label = "Download Video";
                         }
                     } else if (media.type === 'audio') {
                         icon = "fa-music";
-                        label = "Convert to Audio";
-                        styleClass = "bg-emerald-600 hover:bg-emerald-500 text-white border-none shadow-lg shadow-emerald-500/20";
+                        label = "Download Audio";
+                        style = "bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-500/20";
                     }
 
-                    btn.className = `flex items-center justify-between p-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${styleClass}`;
+                    btn.className = `w-full flex items-center justify-between p-3 rounded-lg text-xs font-bold border transition-all active:scale-[0.98] ${style}`;
                     btn.innerHTML = `
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid ${icon}"></i>
-                            <span>${label}</span>
+                            <i class="fa-solid ${icon}"></i> <span>${label}</span>
                         </div>
-                        <span class="text-xs opacity-70 font-normal bg-black/20 px-1.5 py-0.5 rounded">${formatSize(media.data_size)}</span>
+                        <span class="opacity-70 font-mono font-normal">${formatSize(media.data_size)}</span>
                     `;
                     
-                    btnContainer.appendChild(btn);
+                    btn.onclick = () => forceDownload(media.url, `Shanove_${data.source}_${Date.now()}.${media.extension}`);
+                    container.appendChild(btn);
                 });
             }
-            resultCard.classList.remove('hidden');
+            document.getElementById('resultCard').classList.remove('hidden');
+        }
+
+        // API TESTER LOGIC
+        async function testApi() {
+            const link = document.getElementById('testInput').value.trim();
+            const output = document.getElementById('jsonOutput');
+            const btn = document.getElementById('btnTest');
+
+            if(!link) return showToast("Isi link dulu bos!", "error");
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}&apikey=${API_KEY}`);
+                const json = await res.json();
+                
+                // Masking for display
+                if(json.data) json.data.author = AUTHOR;
+                json.author = AUTHOR;
+
+                output.innerHTML = syntaxHighlight(JSON.stringify(json, null, 2));
+            } catch (e) {
+                output.textContent = "Error: " + e.message;
+            } finally {
+                btn.innerHTML = 'SEND';
+                btn.disabled = false;
+            }
+        }
+
+        // UTILS
+        async function forceDownload(url, filename) {
+            showToast("Mendownload...", "loading");
+            try {
+                const res = await fetch(url);
+                const blob = await res.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                showToast("Tersimpan di Galeri!", "success");
+            } catch (e) {
+                window.open(url, '_blank');
+                showToast("Membuka tab baru...", "info");
+            }
+        }
+
+        async function pasteLink(id) {
+            try {
+                const t = await navigator.clipboard.readText();
+                document.getElementById(id).value = t;
+                showToast("Ditempel!", "success");
+            } catch(e) { showToast("Gagal paste", "error"); }
+        }
+
+        function copyText(t) {
+            navigator.clipboard.writeText(t);
+            showToast("Disalin!", "success");
         }
 
         function formatSize(bytes) {
-            if (!bytes) return '';
+            if(!bytes) return '';
             const i = Math.floor(Math.log(bytes) / Math.log(1024));
-            return (bytes / Math.pow(1024, i)).toFixed(1) + ['B', 'KB', 'MB', 'GB'][i];
+            return (bytes / Math.pow(1024, i)).toFixed(1) + ['B', 'KB', 'MB'][i];
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            const i = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').textContent = msg;
+            
+            i.innerHTML = type === 'success' ? '<i class="fa-solid fa-check text-green-400"></i>' : 
+                          type === 'error' ? '<i class="fa-solid fa-xmark text-red-400"></i>' : 
+                          type === 'loading' ? '<i class="fa-solid fa-circle-notch fa-spin text-blue-400"></i>' :
+                          '<i class="fa-solid fa-info text-blue-400"></i>';
+
+            t.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            if(type !== 'loading') setTimeout(() => t.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none'), 2000);
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'hl-num';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) { cls = 'hl-key'; } else { cls = 'hl-str'; }
+                }
+                return '< class="' + cls + '">' + match + '</span>';
+            });
         }
     </script>
 </body>
