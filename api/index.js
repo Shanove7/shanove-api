@@ -1,52 +1,41 @@
-export default async function handler(req, res) {
-  // 1. Setup CORS agar bisa ditembak dari website mana saja
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Content-Type', 'application/json');
+const express = require('express');
+const cors = require('cors');
+const fetch = require('node-fetch');
 
-  // Handle preflight request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+const app = express();
 
-  const { prompt } = req.query;
+// Config
+const REAL_API_URL = 'https://api.ferdev.my.id/downloader/allinone';
+const REAL_API_KEY = 'RS-e5vtb61yow'; 
+const CUSTOM_AUTHOR = 'Shanove'; 
 
-  // 2. Validasi Parameter
-  if (!prompt) {
-    return res.status(400).json({
-      status: false,
-      creator: "Shanove",
-      message: "Parameter 'prompt' is required."
-    });
-  }
+app.use(cors());
+app.use(express.json());
 
-  try {
-    // 3. Request ke Upstream API (Hidden Key)
-    const apiKey = 'RS-e5vtb61yow'; // Key Pribadi
-    const targetUrl = `https://api.ferdev.my.id/ai/aicoding?apikey=${apiKey}&prompt=${encodeURIComponent(prompt)}`;
-    
-    const response = await fetch(targetUrl);
-    const data = await response.json();
+// Endpoint Utama
+app.get('/downloader/allinone', async (req, res) => {
+    // ... (KODE LOGIKA SAMA PERSIS SEPERTI SEBELUMNYA) ...
+    // Copy paste logika fetch dan manipulasi author di sini
+    try {
+        const { link } = req.query;
+        if (!link) return res.status(400).json({ success: false, message: 'Link required' });
 
-    // 4. Bungkus ulang Response (Re-branding)
-    // Menghilangkan jejak API asli dan menampilkan Shanove
-    const finalResponse = {
-      status: true,
-      creator: "Shanove",
-      data: {
-        query: prompt,
-        answer: data.result || "No response from AI"
-      }
-    };
+        const targetUrl = `${REAL_API_URL}?link=${encodeURIComponent(link)}&apikey=${REAL_API_KEY}`;
+        const response = await fetch(targetUrl);
+        const data = await response.json();
 
-    res.status(200).json(finalResponse);
+        if (data.author) data.author = CUSTOM_AUTHOR;
+        if (data.data && data.data.author) data.data.author = CUSTOM_AUTHOR;
+        
+        return res.json(data);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
 
-  } catch (error) {
-    res.status(500).json({
-      status: false,
-      creator: "Shanove",
-      message: "Internal Server Error"
-    });
-  }
-}
+app.get('/', (req, res) => {
+    res.json({ status: "Active", author: "Shanove" });
+});
 
+// PENTING: Ganti app.listen dengan ini untuk Vercel
+module.exports = app;
