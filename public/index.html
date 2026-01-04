@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shanove - Universal Downloader</title>
+    <title>Shanove Api - Downloader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -61,7 +61,6 @@
         }
         ::-webkit-scrollbar { width: 0px; background: transparent; }
         
-        /* JSON Color */
         .json-key { color: #60a5fa; }
         .json-string { color: #22d3ee; }
         .json-number { color: #f472b6; }
@@ -95,7 +94,7 @@
     <!-- MAIN CONTAINER -->
     <main class="flex-grow pt-24 pb-8 px-4 w-full max-w-md mx-auto relative">
         
-        <!-- RUNNING TEXT INFO -->
+        <!-- RUNNING TEXT INFO (SUPPORT) -->
         <div class="mb-6 bg-zinc-900/50 border border-white/5 rounded-lg py-2 overflow-hidden relative">
             <div class="flex animate-marquee gap-8 whitespace-nowrap">
                 <div class="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
@@ -155,7 +154,7 @@
                     <div class="absolute inset-0 rounded-full border-4 border-zinc-800"></div>
                     <div class="absolute inset-0 rounded-full border-4 border-t-cyan-500 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
                 </div>
-                <p class="text-xs text-zinc-400 font-mono animate-pulse">Menghubungi Shanove API...</p>
+                <p class="text-xs text-zinc-400 font-mono animate-pulse">Sedang mengambil data...</p>
             </div>
 
             <!-- Result Card -->
@@ -184,9 +183,9 @@
             <div class="glass rounded-2xl p-5 border border-white/5">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-code text-cyan-400"></i> Endpoint</h2>
-                    <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-bold">ONLINE</span>
+                    <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-bold">ACTIVE</span>
                 </div>
-                <div class="bg-zinc-950 rounded-xl border border-white/10 p-3 mb-4 cursor-pointer active:scale-[0.99]" onclick="copyText(window.location.origin + '/api/downloader/allinone')">
+                <div class="bg-zinc-950 rounded-xl border border-white/10 p-3 mb-4 cursor-pointer active:scale-[0.99]" onclick="copyText('https://api.shanove.my.id/downloader/allinone')">
                     <div class="flex justify-between items-center">
                         <code class="text-[10px] font-mono text-blue-400 truncate pr-2">api.shanove.my.id/downloader/allinone</code>
                         <i class="fa-regular fa-copy text-zinc-500 text-xs"></i>
@@ -214,10 +213,12 @@
         <p id="toast-msg" class="text-xs font-bold"></p>
     </div>
 
+    <!-- Hidden Iframe for Download Hack -->
+    <iframe id="download_iframe" style="display:none;"></iframe>
+
     <script>
-        // MENGARAH KE BACKEND SENDIRI (Proxy)
-        // Jika sudah di hosting di Vercel, cukup "/api/downloader/allinone"
-        const API_URL = "/api/downloader/allinone"; 
+        const API_URL = "https://api.ferdev.my.id/downloader/allinone";
+        const API_KEY = "RS-e5vtb61yow";
         const AUTHOR = "Shanove";
 
         function switchTab(tab) {
@@ -246,21 +247,18 @@
 
             toggleLoader(true);
             try {
-                // Request ke backend sendiri, TANPA API Key (Backend yang handle)
-                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}`);
+                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}&apikey=${API_KEY}`);
                 const json = await res.json();
 
                 if(json.data && !json.data.error) {
-                    // Jika backend belum mengubah author, frontend menimpanya untuk tampilan
-                    if(json.data) json.data.author = AUTHOR; 
+                    json.data.author = AUTHOR; 
                     renderResult(json.data);
                     showToast("Video ditemukan!", "success");
                 } else {
                     showToast("Video tidak ditemukan.", "error");
                 }
             } catch (e) {
-                console.error(e);
-                showToast("Server Error / API Down.", "error");
+                showToast("Gagal terhubung server.", "error");
             } finally {
                 toggleLoader(false);
             }
@@ -275,6 +273,8 @@
             container.innerHTML = '';
 
             if(data.medias) {
+                // Hapus duplikat 'video' agar tidak bingung, ambil yg terbaik saja jika ada banyak
+                // TAPI user minta video no wm, jadi kita tampilkan semua
                 data.medias.forEach(media => {
                     const btn = document.createElement('button');
                     let label = "Download";
@@ -318,34 +318,52 @@
             document.getElementById('resultCard').classList.remove('hidden');
         }
 
+        // --- SISTEM DOWNLOAD BARU (SOLUSI VIDEO PLAY) ---
         async function forceDownloadVideo(url, filename) {
             showToast("Sedang mendownload...", "loading");
 
             try {
+                // STEP 1: Coba ambil file mentah (BLOB)
+                // Ini mencegah browser memutar video karena kita ambil datanya dulu
                 const response = await fetch(url);
                 if (!response.ok) throw new Error("Fetch failed");
+                
                 const blob = await response.blob();
                 const blobUrl = window.URL.createObjectURL(blob);
+                
+                // STEP 2: Buat link download sementara
                 const a = document.createElement('a');
                 a.href = blobUrl;
-                a.download = filename;
+                a.download = filename; // Atribut ini memaksa simpan
                 document.body.appendChild(a);
                 a.click();
+                
+                // STEP 3: Bersihkan
                 setTimeout(() => {
                     document.body.removeChild(a);
                     window.URL.revokeObjectURL(blobUrl);
                 }, 100);
+
                 showToast("Berhasil disimpan!", "success");
+
             } catch (error) {
-                console.log("Blob blocked, fallback...");
+                console.log("Blob blocked by CORS, trying fallback...");
+                
+                // FALLBACK: Jika server video (CORS) menolak fetch blob
+                // Kita gunakan trik IFRAME atau WINDOW OPEN
+                // Kita juga beritahu user
+                
                 showToast("Membuka Download Manual...", "info");
+                
                 setTimeout(() => {
                     window.open(url, '_blank');
-                    alert("Klik tombol titik tiga di video > Download");
+                    // Tampilkan pesan bantuan jika di browser malah play
+                    alert("Jika video terbuka di tab baru: \nTekan titik tiga (⋮) di pojok video -> Pilih 'Download'.");
                 }, 1000);
             }
         }
 
+        // --- API TESTER (PRETTY JSON) ---
         async function testApi() {
             const link = document.getElementById('testInput').value.trim();
             const out = document.getElementById('jsonOutput');
@@ -355,10 +373,12 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             
             try {
-                // Request ke backend sendiri
-                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}`);
+                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}&apikey=${API_KEY}`);
                 const json = await res.json();
+                if(json.data) json.data.author = AUTHOR;
+                json.author = AUTHOR;
                 
+                // Colorize JSON
                 out.innerHTML = syntaxHighlight(json);
             } catch(e) { out.textContent = "Error: " + e; } 
             finally { btn.innerText = "TEST"; }
@@ -400,4 +420,6 @@
     </script>
 </body>
 </html>
+
+
 
