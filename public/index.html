@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shanove Api - Downloader</title>
+    <title>Shanove Downloader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
                         cyan: '#06b6d4',
                     },
                     animation: {
-                        'marquee': 'marquee 20s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
                         'fade-in': 'fadeIn 0.4s ease-out forwards',
                         'slide-up': 'slideUp 0.5s ease-out forwards',
                     },
@@ -65,6 +65,12 @@
         .json-string { color: #22d3ee; }
         .json-number { color: #f472b6; }
         .json-bool { color: #facc15; }
+        
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="text-zinc-100 min-h-screen flex flex-col font-sans overflow-x-hidden">
@@ -77,7 +83,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-lg leading-none tracking-tight">Shanove</h1>
-                <p class="text-[9px] text-cyan-400 font-bold tracking-widest uppercase">Universal Saver</p>
+                <p class="text-[9px] text-cyan-400 font-bold tracking-widest uppercase">Downloader</p>
             </div>
         </div>
         
@@ -94,40 +100,50 @@
     <!-- MAIN CONTAINER -->
     <main class="flex-grow pt-24 pb-8 px-4 w-full max-w-md mx-auto relative">
         
-        <!-- RUNNING TEXT INFO (SUPPORT) -->
+        <!-- RUNNING TEXT INFO -->
         <div class="mb-6 bg-zinc-900/50 border border-white/5 rounded-lg py-2 overflow-hidden relative">
             <div class="flex animate-marquee gap-8 whitespace-nowrap">
                 <div class="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
-                    <span class="text-pink-500"><i class="fa-brands fa-instagram"></i> IG REELS/STORY</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-white"><i class="fa-brands fa-tiktok"></i> TIKTOK NO WM</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-red-500"><i class="fa-brands fa-youtube"></i> YOUTUBE</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-green-500"><i class="fa-brands fa-spotify"></i> SPOTIFY</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-blue-400"><i class="fa-brands fa-facebook"></i> FACEBOOK</span>
+                    <span class="text-white"><i class="fa-brands fa-tiktok"></i> TIKTOK</span> •
+                    <span class="text-pink-500"><i class="fa-brands fa-instagram"></i> INSTAGRAM</span> •
+                    <span class="text-red-500"><i class="fa-brands fa-youtube"></i> YOUTUBE</span> •
+                    <span class="text-green-500"><i class="fa-brands fa-spotify"></i> SPOTIFY</span> •
+                    <span class="text-white">CAPCUT</span> •
+                    <span class="text-blue-500">FACEBOOK</span> •
+                    <span class="text-yellow-500">SNACKVIDEO</span> •
+                    <span class="text-orange-500">SOUNDCLOUD</span> •
+                    <span class="text-blue-400">TWITTER/X</span> •
+                    <span class="text-purple-400">TERABOX</span>
                 </div>
                 <!-- Duplicate for loop -->
                 <div class="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
-                    <span class="text-pink-500"><i class="fa-brands fa-instagram"></i> IG REELS/STORY</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-white"><i class="fa-brands fa-tiktok"></i> TIKTOK NO WM</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-red-500"><i class="fa-brands fa-youtube"></i> YOUTUBE</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-green-500"><i class="fa-brands fa-spotify"></i> SPOTIFY</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-blue-400"><i class="fa-brands fa-facebook"></i> FACEBOOK</span>
+                    <span class="text-white"><i class="fa-brands fa-tiktok"></i> TIKTOK</span> •
+                    <span class="text-pink-500"><i class="fa-brands fa-instagram"></i> INSTAGRAM</span> •
+                    <span class="text-red-500"><i class="fa-brands fa-youtube"></i> YOUTUBE</span> •
+                    <span class="text-green-500"><i class="fa-brands fa-spotify"></i> SPOTIFY</span> •
+                    <span class="text-white">CAPCUT</span> •
+                    <span class="text-blue-500">FACEBOOK</span> •
+                    <span class="text-yellow-500">SNACKVIDEO</span> •
+                    <span class="text-orange-500">SOUNDCLOUD</span> •
+                    <span class="text-blue-400">TWITTER/X</span> •
+                    <span class="text-purple-400">TERABOX</span>
                 </div>
             </div>
         </div>
 
         <!-- TAB SWITCHER -->
         <div class="glass p-1 rounded-xl flex mb-8 relative">
-            <div id="tab-bg" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-zinc-700 rounded-lg shadow-md transition-all duration-300 ease-out z-0"></div>
-            <button onclick="switchTab('app')" id="tab-app" class="flex-1 relative z-10 py-2.5 text-xs font-bold text-white text-center transition-colors uppercase tracking-wide">Downloader</button>
-            <button onclick="switchTab('docs')" id="tab-docs" class="flex-1 relative z-10 py-2.5 text-xs font-medium text-zinc-400 text-center transition-colors uppercase tracking-wide">API Docs</button>
+            <div id="tab-bg" class="absolute top-1 bottom-1 left-1 w-[calc(33.33%-4px)] bg-zinc-700 rounded-lg shadow-md transition-all duration-300 ease-out z-0"></div>
+            
+            <button onclick="switchTab('app')" id="tab-app" class="flex-1 relative z-10 py-2.5 text-[10px] sm:text-xs font-bold text-white text-center transition-colors uppercase tracking-wide">
+                Home
+            </button>
+            <button onclick="switchTab('list')" id="tab-list" class="flex-1 relative z-10 py-2.5 text-[10px] sm:text-xs font-medium text-zinc-400 text-center transition-colors uppercase tracking-wide">
+                Supported
+            </button>
+            <button onclick="switchTab('docs')" id="tab-docs" class="flex-1 relative z-10 py-2.5 text-[10px] sm:text-xs font-medium text-zinc-400 text-center transition-colors uppercase tracking-wide">
+                API Docs
+            </button>
         </div>
 
         <!-- === VIEW: APP DOWNLOADER === -->
@@ -142,10 +158,15 @@
                         <button onclick="pasteLink('urlInput')" class="absolute right-2 px-3 py-1.5 text-[10px] font-bold bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg border border-white/5 active:scale-95 transition-all">PASTE</button>
                     </div>
                 </div>
+                <div class="flex justify-center gap-2 text-[10px] text-zinc-500">
+                    <span><i class="fa-solid fa-check text-green-500"></i> No Watermark</span>
+                    <span><i class="fa-solid fa-check text-green-500"></i> Full Speed</span>
+                    <span><i class="fa-solid fa-check text-green-500"></i> Auto Detect</span>
+                </div>
             </div>
 
-            <button onclick="fetchData()" id="btnAction" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                <span>DOWNLOAD SEKARANG</span> <i class="fa-solid fa-arrow-right"></i>
+            <button onclick="fetchData()" id="btnAction" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
+                <span class="group-hover:tracking-wide transition-all">DOWNLOAD</span> <i class="fa-solid fa-cloud-arrow-down"></i>
             </button>
 
             <!-- Loading Spinner -->
@@ -154,7 +175,7 @@
                     <div class="absolute inset-0 rounded-full border-4 border-zinc-800"></div>
                     <div class="absolute inset-0 rounded-full border-4 border-t-cyan-500 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
                 </div>
-                <p class="text-xs text-zinc-400 font-mono animate-pulse">Sedang mengambil data...</p>
+                <p class="text-xs text-zinc-400 font-mono animate-pulse">Menghubungi Shanove API...</p>
             </div>
 
             <!-- Result Card -->
@@ -178,14 +199,26 @@
             </div>
         </section>
 
+        <!-- === VIEW: SUPPORTED LIST === -->
+        <section id="view-list" class="hidden animate-fade-in">
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-bold text-white mb-1">Supported Platforms</h2>
+                <p class="text-xs text-zinc-400">Lebih dari 30+ Website didukung</p>
+            </div>
+
+            <div class="badge-grid" id="supportGrid">
+                <!-- Items will be injected by JS for cleanliness -->
+            </div>
+        </section>
+
         <!-- === VIEW: API DOCS === -->
         <section id="view-docs" class="hidden animate-fade-in space-y-6">
             <div class="glass rounded-2xl p-5 border border-white/5">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-code text-cyan-400"></i> Endpoint</h2>
-                    <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-bold">ACTIVE</span>
+                    <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-bold">ONLINE</span>
                 </div>
-                <div class="bg-zinc-950 rounded-xl border border-white/10 p-3 mb-4 cursor-pointer active:scale-[0.99]" onclick="copyText('https://api.shanove.my.id/downloader/allinone')">
+                <div class="bg-zinc-950 rounded-xl border border-white/10 p-3 mb-4 cursor-pointer active:scale-[0.99]" onclick="copyText(window.location.origin + '/api/downloader/allinone')">
                     <div class="flex justify-between items-center">
                         <code class="text-[10px] font-mono text-blue-400 truncate pr-2">api.shanove.my.id/downloader/allinone</code>
                         <i class="fa-regular fa-copy text-zinc-500 text-xs"></i>
@@ -213,52 +246,104 @@
         <p id="toast-msg" class="text-xs font-bold"></p>
     </div>
 
-    <!-- Hidden Iframe for Download Hack -->
-    <iframe id="download_iframe" style="display:none;"></iframe>
-
     <script>
-        const API_URL = "https://api.ferdev.my.id/downloader/allinone";
-        const API_KEY = "RS-e5vtb61yow";
+        // BACKEND PROXY
+        const API_URL = "/api/downloader/allinone"; 
         const AUTHOR = "Shanove";
 
-        function switchTab(tab) {
-            const app = document.getElementById('view-app');
-            const docs = document.getElementById('view-docs');
-            const bg = document.getElementById('tab-bg');
-            const bApp = document.getElementById('tab-app');
-            const bDocs = document.getElementById('tab-docs');
+        // --- PLATFORM DATA ---
+        const platforms = [
+            { name: "TikTok", icon: "fa-brands fa-tiktok", color: "text-white" },
+            { name: "Instagram", icon: "fa-brands fa-instagram", color: "text-pink-500" },
+            { name: "IG Story", icon: "fa-solid fa-circle-notch", color: "text-pink-400" },
+            { name: "YouTube", icon: "fa-brands fa-youtube", color: "text-red-500" },
+            { name: "Shorts", icon: "fa-solid fa-play", color: "text-red-400" },
+            { name: "Spotify", icon: "fa-brands fa-spotify", color: "text-green-500" },
+            { name: "Facebook", icon: "fa-brands fa-facebook", color: "text-blue-500" },
+            { name: "Twitter / X", icon: "fa-brands fa-x-twitter", color: "text-white" },
+            { name: "CapCut", icon: "fa-solid fa-scissors", color: "text-white" },
+            { name: "Threads", icon: "fa-solid fa-at", color: "text-white" },
+            { name: "Pinterest", icon: "fa-brands fa-pinterest", color: "text-red-500" },
+            { name: "SoundCloud", icon: "fa-brands fa-soundcloud", color: "text-orange-500" },
+            { name: "Google Drive", icon: "fa-brands fa-google-drive", color: "text-green-400" },
+            { name: "Terabox", icon: "fa-solid fa-box", color: "text-blue-400" },
+            { name: "MediaFire", icon: "fa-solid fa-fire", color: "text-blue-300" },
+            { name: "Douyin", icon: "fa-brands fa-tiktok", color: "text-white" },
+            { name: "SnackVideo", icon: "fa-solid fa-cookie-bite", color: "text-yellow-400" },
+            { name: "Likee", icon: "fa-solid fa-heart", color: "text-pink-500" },
+            { name: "Bilibili", icon: "fa-solid fa-tv", color: "text-blue-400" },
+            { name: "GitHub", icon: "fa-brands fa-github", color: "text-white" },
+            { name: "Get Mods", icon: "fa-brands fa-android", color: "text-green-500" },
+            { name: "F-Droid", icon: "fa-solid fa-robot", color: "text-green-500" },
+            { name: "PixelDrain", icon: "fa-solid fa-cloud", color: "text-cyan-400" },
+            { name: "Scribd", icon: "fa-solid fa-book", color: "text-green-600" },
+            { name: "Apple Music", icon: "fa-brands fa-apple", color: "text-red-400" },
+            { name: "XVideos", icon: "fa-solid fa-circle-play", color: "text-red-500" },
+            { name: "XNXX", icon: "fa-solid fa-video", color: "text-blue-500" },
+        ];
 
-            if(tab === 'app') {
-                app.classList.remove('hidden'); docs.classList.add('hidden');
-                bg.style.transform = 'translateX(0)';
-                bApp.classList.add('text-white', 'font-bold'); bApp.classList.remove('text-zinc-400', 'font-medium');
-                bDocs.classList.add('text-zinc-400', 'font-medium'); bDocs.classList.remove('text-white', 'font-bold');
-            } else {
-                app.classList.add('hidden'); docs.classList.remove('hidden');
-                bg.style.transform = 'translateX(100%)';
-                bDocs.classList.add('text-white', 'font-bold'); bDocs.classList.remove('text-zinc-400', 'font-medium');
-                bApp.classList.add('text-zinc-400', 'font-medium'); bApp.classList.remove('text-white', 'font-bold');
-            }
+        // RENDER PLATFORMS
+        const grid = document.getElementById('supportGrid');
+        platforms.forEach(p => {
+            const div = document.createElement('div');
+            div.className = "glass rounded-xl p-3 flex items-center gap-3 border border-white/5 hover:border-cyan-500/30 transition-colors";
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0">
+                    <i class="${p.icon} ${p.color} text-sm"></i>
+                </div>
+                <span class="text-[11px] font-bold text-zinc-300 truncate">${p.name}</span>
+            `;
+            grid.appendChild(div);
+        });
+
+
+        // --- NAVIGATION ---
+        function switchTab(tab) {
+            const views = ['app', 'list', 'docs'];
+            const bg = document.getElementById('tab-bg');
+            
+            // Set View Visibility
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                const btn = document.getElementById(`tab-${v}`);
+                if(tab === v) {
+                    el.classList.remove('hidden');
+                    btn.classList.add('text-white', 'font-bold');
+                    btn.classList.remove('text-zinc-400', 'font-medium');
+                } else {
+                    el.classList.add('hidden');
+                    btn.classList.add('text-zinc-400', 'font-medium');
+                    btn.classList.remove('text-white', 'font-bold');
+                }
+            });
+
+            // Set Background Slide
+            if(tab === 'app') bg.style.transform = 'translateX(0%)';
+            if(tab === 'list') bg.style.transform = 'translateX(100%)';
+            if(tab === 'docs') bg.style.transform = 'translateX(200%)';
         }
 
+        // --- DOWNLOADER LOGIC ---
         async function fetchData() {
             const link = document.getElementById('urlInput').value.trim();
             if(!link) return showToast("Masukkan link video!", "error");
 
             toggleLoader(true);
             try {
-                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}&apikey=${API_KEY}`);
+                // Request ke backend sendiri
+                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}`);
                 const json = await res.json();
 
                 if(json.data && !json.data.error) {
-                    json.data.author = AUTHOR; 
+                    if(json.data) json.data.author = AUTHOR; 
                     renderResult(json.data);
                     showToast("Video ditemukan!", "success");
                 } else {
                     showToast("Video tidak ditemukan.", "error");
                 }
             } catch (e) {
-                showToast("Gagal terhubung server.", "error");
+                console.error(e);
+                showToast("Server Error / API Down.", "error");
             } finally {
                 toggleLoader(false);
             }
@@ -273,8 +358,6 @@
             container.innerHTML = '';
 
             if(data.medias) {
-                // Hapus duplikat 'video' agar tidak bingung, ambil yg terbaik saja jika ada banyak
-                // TAPI user minta video no wm, jadi kita tampilkan semua
                 data.medias.forEach(media => {
                     const btn = document.createElement('button');
                     let label = "Download";
@@ -318,52 +401,34 @@
             document.getElementById('resultCard').classList.remove('hidden');
         }
 
-        // --- SISTEM DOWNLOAD BARU (SOLUSI VIDEO PLAY) ---
         async function forceDownloadVideo(url, filename) {
             showToast("Sedang mendownload...", "loading");
 
             try {
-                // STEP 1: Coba ambil file mentah (BLOB)
-                // Ini mencegah browser memutar video karena kita ambil datanya dulu
                 const response = await fetch(url);
                 if (!response.ok) throw new Error("Fetch failed");
-                
                 const blob = await response.blob();
                 const blobUrl = window.URL.createObjectURL(blob);
-                
-                // STEP 2: Buat link download sementara
                 const a = document.createElement('a');
                 a.href = blobUrl;
-                a.download = filename; // Atribut ini memaksa simpan
+                a.download = filename;
                 document.body.appendChild(a);
                 a.click();
-                
-                // STEP 3: Bersihkan
                 setTimeout(() => {
                     document.body.removeChild(a);
                     window.URL.revokeObjectURL(blobUrl);
                 }, 100);
-
                 showToast("Berhasil disimpan!", "success");
-
             } catch (error) {
-                console.log("Blob blocked by CORS, trying fallback...");
-                
-                // FALLBACK: Jika server video (CORS) menolak fetch blob
-                // Kita gunakan trik IFRAME atau WINDOW OPEN
-                // Kita juga beritahu user
-                
+                console.log("Blob blocked, fallback...");
                 showToast("Membuka Download Manual...", "info");
-                
                 setTimeout(() => {
                     window.open(url, '_blank');
-                    // Tampilkan pesan bantuan jika di browser malah play
-                    alert("Jika video terbuka di tab baru: \nTekan titik tiga (⋮) di pojok video -> Pilih 'Download'.");
+                    alert("Klik tombol titik tiga di video > Download");
                 }, 1000);
             }
         }
 
-        // --- API TESTER (PRETTY JSON) ---
         async function testApi() {
             const link = document.getElementById('testInput').value.trim();
             const out = document.getElementById('jsonOutput');
@@ -373,12 +438,9 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             
             try {
-                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}&apikey=${API_KEY}`);
+                const res = await fetch(`${API_URL}?link=${encodeURIComponent(link)}`);
                 const json = await res.json();
-                if(json.data) json.data.author = AUTHOR;
-                json.author = AUTHOR;
                 
-                // Colorize JSON
                 out.innerHTML = syntaxHighlight(json);
             } catch(e) { out.textContent = "Error: " + e; } 
             finally { btn.innerText = "TEST"; }
