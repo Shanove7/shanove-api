@@ -1,7 +1,6 @@
 {
   "name": "shanove-api",
   "version": "1.0.0",
-  "description": "Proxy API for Shanove Downloader",
   "main": "api/index.js",
   "dependencies": {
     "cors": "^2.8.5",
@@ -9,5 +8,3 @@
     "node-fetch": "^2.6.9"
   }
 }
-
-
